@@ -73,6 +73,17 @@ param existing_AppInsights_Name string = ''
 // --------------------------------------------------------------------------------------------------------------
 @description('If you provide this is will be used instead of creating a new Container App Environment')
 param existing_managedAppEnv_Name string = ''
+@description('Name of the Container Apps Environment workload profile to use for the app')
+param appContainerAppEnvironmentWorkloadProfileName string = 'app'
+@description('Workload profiles for the Container Apps environment')
+param containerAppEnvironmentWorkloadProfiles array = [
+  {
+    name: 'app'
+    workloadProfileType: 'D4'
+    minimumCount: 1
+    maximumCount: 10
+  }
+]
 
 // --------------------------------------------------------------------------------------------------------------
 // Existing OpenAI resources?
@@ -519,10 +530,11 @@ module managedEnvironment './core/host/managedEnvironment.bicep' = {
     appSubnetId: vnet.outputs.subnet2ResourceId
     tags: tags
     publicAccessEnabled: publicAccessEnabled
+    containerAppEnvironmentWorkloadProfiles: containerAppEnvironmentWorkloadProfiles
   }
 }
 
-// Applications use managed identity to access resources, keys are not needed but kept for reference
+// Applications use managed identity to access resources, keys are not needed but kept for future reference
 // var accessKeys = [
 //   { name: 'AOAIStandardServiceKey', secretRef: 'aikey' }
 //   { name: 'AzureDocumentIntelligenceKey', secretRef: 'docintellikey' }
@@ -530,12 +542,14 @@ module managedEnvironment './core/host/managedEnvironment.bicep' = {
 //   { name: 'CosmosDbKey', secretRef: 'cosmos' }
 // ]
 
-var settings = [
+var apiTargetPort = 8080
+var apiSettings = [
   { name: 'AnalysisApiEndpoint', value: 'https://${resourceNames.outputs.containerAppAPIName}.${managedEnvironment.outputs.defaultDomain}' }
   { name: 'AnalysisApiKey', secretRef: 'apikey' }
   { name: 'AOAIStandardServiceEndpoint', value: openAI.outputs.endpoint }
   { name: 'AOAIStandardChatGptDeployment', value: 'gpt-4o' }
   { name: 'ApiKey', secretRef: 'apikey' }
+  { name: 'PORT', value: '${apiTargetPort}' }
   { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: logAnalytics.outputs.appInsightsConnectionString }
   { name: 'AZURE_CLIENT_ID', value: identity.outputs.managedIdentityClientId }
   { name: 'AzureDocumentIntelligenceEndpoint', value: documentIntelligence.outputs.endpoint }
@@ -551,8 +565,9 @@ module containerAppAPI './core/host/containerappstub.bicep' = {
     appName: resourceNames.outputs.containerAppAPIName
     managedEnvironmentName: managedEnvironment.outputs.name
     managedEnvironmentRg: managedEnvironment.outputs.resourceGroupName
+    workloadProfileName: appContainerAppEnvironmentWorkloadProfileName
     registryName: resourceNames.outputs.ACR_Name
-    targetPort: 8080
+    targetPort: apiTargetPort
     userAssignedIdentityName: identity.outputs.managedIdentityName
     location: location
     imageName: apiImageName
@@ -565,19 +580,34 @@ module containerAppAPI './core/host/containerappstub.bicep' = {
       searchkey: searchSecret.outputs.secretUri
       apikey: apiKeySecret.outputs.secretUri
     }
-    env: settings
+    env: apiSettings
   }
   dependsOn: createDnsZones ? [allDnsZones, containerRegistry] : [containerRegistry]
 }
 
+var batchTargetPort = 8080
+var batchSettings = union(apiSettings, [
+  { name: 'FUNCTIONS_WORKER_RUNTIME', value: 'dotnet-isolated' }
+  // see: https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-configure-managed-identity
+  { name: 'AzureWebJobsStorage__accountName', value: storage.outputs.name }
+  { name: 'AzureWebJobsStorage__credential', value: 'managedidentity' }
+  { name: 'AzureWebJobsStorage__clientId', value: identity.outputs.managedIdentityClientId }
+  { name: 'BatchAnalysisStorageAccountName', value: storage.outputs.name }
+  { name: 'BatchAnalysisStorageInputContainerName', value: storage.outputs.containerNames[1].name }
+  { name: 'BatchAnalysisStorageOutputContainerName', value: storage.outputs.containerNames[2].name }
+  { name: 'CosmosDbDatabaseName', value: cosmos.outputs.databaseName }
+  { name: 'CosmosDbContainerName', value: uiChatContainerName }
+  { name: 'MaxBatchSize', value: '10' }
+])
 module containerAppBatch './core/host/containerappstub.bicep' = {
   name: 'ca-batch-stub${deploymentSuffix}'
   params: {
     appName: resourceNames.outputs.containerAppBatchName
     managedEnvironmentName: managedEnvironment.outputs.name
     managedEnvironmentRg: managedEnvironment.outputs.resourceGroupName
+    workloadProfileName: appContainerAppEnvironmentWorkloadProfileName
     registryName: resourceNames.outputs.ACR_Name
-    targetPort: 80
+    targetPort: batchTargetPort
     userAssignedIdentityName: identity.outputs.managedIdentityName
     location: location
     imageName: batchImageName
@@ -590,19 +620,7 @@ module containerAppBatch './core/host/containerappstub.bicep' = {
       searchkey: searchSecret.outputs.secretUri
       apikey: apiKeySecret.outputs.secretUri
     }
-    env: union(settings, [
-      { name: 'FUNCTIONS_WORKER_RUNTIME', value: 'dotnet-isolated' }
-      // see: https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-configure-managed-identity
-      { name: 'AzureWebJobsStorage__accountName', value: storage.outputs.name }
-      { name: 'AzureWebJobsStorage__credential', value: 'managedidentity' }
-      { name: 'AzureWebJobsStorage__clientId', value: identity.outputs.managedIdentityClientId }
-      { name: 'BatchAnalysisStorageAccountName', value: storage.outputs.name }
-      { name: 'BatchAnalysisStorageInputContainerName', value: storage.outputs.containerNames[1].name }
-      { name: 'BatchAnalysisStorageOutputContainerName', value: storage.outputs.containerNames[2].name }
-      { name: 'CosmosDbDatabaseName', value: cosmos.outputs.databaseName }
-      { name: 'CosmosDbContainerName', value: uiChatContainerName }
-      { name: 'MaxBatchSize', value: '10' }
-    ])
+    env: batchSettings
   }
   dependsOn: createDnsZones ? [allDnsZones, containerRegistry] : [containerRegistry]
 }
