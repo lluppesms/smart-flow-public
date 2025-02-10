@@ -3,8 +3,8 @@
 // --------------------------------------------------------------------------------------------------------------
 using 'main.bicep'
 
-param applicationName = '#{appNameLower}#'                   // from the variable group
-param location = '#{location}#'                              // from the var_common file
+param applicationName = '#{APP_NAME}#'
+param location = '#{RESOURCEGROUP_LOCATION}#'
 param openAI_deploy_location = '#{OPENAI_DEPLOY_LOCATION}#'
 param environmentName = '#{envCode}#'
 param appendResourceTokens = false
