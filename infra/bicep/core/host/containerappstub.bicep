@@ -49,7 +49,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   }
   
   properties: {
-    environmentId: containerAppEnvironmentResource.id
+    managedEnvironmentId: containerAppEnvironmentResource.id
     configuration: {
       ingress: {
         external: true
@@ -71,7 +71,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
     template: {
       containers: [
         {
-          name: workloadProfileName
+          name: 'main'
           image: fetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
           env: env
           resources: {
