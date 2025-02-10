@@ -126,6 +126,8 @@ param addRoleAssignments bool = true
 param deduplicateKeyVaultSecrets bool = true
 @description('Set this if you want to append all the resource names with a unique token')
 param appendResourceTokens bool = false
+@description('Should batch container app be deployed?')
+param deployBatchApp bool = true
 
 // --------------------------------------------------------------------------------------------------------------
 // A variable masquerading as a parameter to allow for dynamic value assignment in Bicep
@@ -609,7 +611,7 @@ var batchSettings = union(apiSettings, [
   { name: 'CosmosDbContainerName', value: uiChatContainerName }
   { name: 'MaxBatchSize', value: '10' }
 ])
-module containerAppBatch './core/host/containerappstub.bicep' = {
+module containerAppBatch './core/host/containerappstub.bicep' = if (deployBatchApp) {
   name: 'ca-batch-stub${deploymentSuffix}'
   params: {
     appName: resourceNames.outputs.containerAppBatchName

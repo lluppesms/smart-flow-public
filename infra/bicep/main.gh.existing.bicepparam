@@ -14,6 +14,7 @@ param publicAccessEnabled = #{publicAccessEnabled}#
 param myIpAddress = '#{ADMIN_IP_ADDRESS}#'
 param principalId = '#{ADMIN_PRINCIPAL_ID}#'
 param deployAIHub = #{deployAIHub}#
+param deployBatchApp = #{runBuildDeployBatch}#
 
 param existingVnetName = '#{APP_NAME_NO_DASHES}#-vnet-dev'
 param vnetPrefix = '10.2.0.0/16'
