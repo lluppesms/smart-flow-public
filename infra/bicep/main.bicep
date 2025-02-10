@@ -92,6 +92,14 @@ param containerAppEnvironmentWorkloadProfiles array = [
 param existing_CogServices_Name string = ''
 @description('Name of ResourceGroup for an existing Cognitive Services account to use')
 param existing_CogServices_RG_Name string = ''
+@description('Name of an existing Search Services account to use')
+param existing_SearchService_Name string = ''
+
+// --------------------------------------------------------------------------------------------------------------
+// Existing Cosmos resources?
+// --------------------------------------------------------------------------------------------------------------
+@description('Name of an existing Cosmos account to use')
+param existing_CosmosAccount_Name string = ''
 
 // --------------------------------------------------------------------------------------------------------------
 // AI Hub Parameters
@@ -364,6 +372,7 @@ module cosmos './core/database/cosmosdb.bicep' = {
   name: 'cosmos${deploymentSuffix}'
   params: {
     accountName: resourceNames.outputs.cosmosName
+    existingAccountName: existing_CosmosAccount_Name
     databaseName: uiDatabaseName
     containerArray: cosmosContainerArray
     location: location
@@ -385,6 +394,7 @@ module searchService './core/search/search-services.bicep' = {
   params: {
     location: location
     name: resourceNames.outputs.searchServiceName
+    existingSearchServiceName: existing_SearchService_Name
     publicNetworkAccess: publicAccessEnabled ? 'enabled' : 'disabled'
     myIpAddress: myIpAddress
     privateEndpointSubnetId: vnet.outputs.subnet1ResourceId
