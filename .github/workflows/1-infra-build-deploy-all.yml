@@ -39,12 +39,12 @@ on:
         description: Create DNS Zones?
         type: boolean
         default: true
-      deployAIHub:
-        description: Deploy AI Hub?
-        type: boolean
-        default: true
       addRoleAssignments:
         description: Add Role Assignments?
+        type: boolean
+        default: true
+      deployAIHub:
+        description: Deploy AI Hub?
         type: boolean
         default: true
       runBuildDeployAPI:
