@@ -1,6 +1,7 @@
 // Copied from https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.machinelearningservices/aistudio-entraid-passthrough
 // See also https://learn.microsoft.com/en-us/samples/azure-samples/azure-ai-studio-secure-bicep/azure-ai-studio-secure-bicep/
 // Creates an Azure AI Hub resource with proxied endpoints for the Azure AI services provider
+// Test:  az deployment group create -n manual --resource-group rg-sf-gh-base-dev --template-file 'core/ai/ai-hub-secure.bicep' --parameters location=eastus2 aiHubName=yyyyyy-hub-dev aiHubFriendlyName=yyyyyy-hub-dev applicationInsightsId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.Insights/components/yyyyyy-appi-dev containerRegistryId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.ContainerRegistry/registries/yyyyyycrdev keyVaultId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.KeyVault/vaults/yyyyyykvdev storageAccountId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.Storage/storageAccounts/yyyyyystdev aiServicesId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.CognitiveServices/accounts/yyyyyy-cog-dev aiServicesTarget=https://yyyyyy-cog-dev.openai.azure.com/ addRoleAssignments=false userObjectId=yyyyyyy userObjectType=User managedIdentityId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/yyyyyy-app-id managedIdentityType=ServicePrincipal aiSearchName=yyyyyy-srch-dev 
 
 @description('Azure region used for the deployment of the Azure AI Hub.')
 param location string
@@ -62,8 +63,12 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
   tags: tags
   kind: 'Hub'
   identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: { '${ managedIdentityId }': {} }
+    type: 'SystemAssigned'
+    // tried this but it keeps getting a 400 error with not other details...?
+    // type: 'UserAssigned'
+    // userAssignedIdentities: {
+    //   '${managedIdentityId}': {}
+    // }
   }
   properties: {
     // organization
@@ -83,23 +88,21 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
     properties: {
       category: 'AzureOpenAI'
       target: aiServicesTarget
-      authType: 'AAD'
       isSharedToAll: true
+      authType: 'AAD'
       metadata: {
         ApiType: 'Azure'
         ResourceId: aiServicesId
       }
     }
   }
-
   resource aiHubSearchConnection 'connections@2024-07-01-preview' = {
     name: searchConnectionName
     properties: {
       category: 'CognitiveSearch'
       target: 'https://${aiSearchName}.search.windows.net'
-      authType: 'AAD'
-      //useWorkspaceManagedIdentity: false
       isSharedToAll: true
+      authType: 'AAD'
       metadata: {
         ApiType: 'Azure'
         ResourceId: aiSearch.id
