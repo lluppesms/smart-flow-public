@@ -19,6 +19,9 @@ param partitionCount int = 1
 param publicNetworkAccess string = 'disabled'
 param replicaCount int = 1
 
+@description('Optional. Sets options that control the availability of semantic search. This configuration is only possible for certain search SKUs in certain locations.')
+param semanticSearch string?
+
 param privateEndpointSubnetId string = ''
 param privateEndpointName string = ''
 param managedIdentityId string = ''
@@ -31,7 +34,7 @@ var resourceGroupName = resourceGroup().name
 var searchKeySecretName = 'search-key'
 
 // --------------------------------------------------------------------------------------------------------------
-resource existingSearchService 'Microsoft.Search/searchServices@2024-06-01-preview' existing = if (!useExistingSearchService) {
+resource existingSearchService 'Microsoft.Search/searchServices@2024-06-01-preview' existing = if (useExistingSearchService) {
   name: existingSearchServiceName
 }
 
@@ -39,26 +42,27 @@ resource search 'Microsoft.Search/searchServices@2024-06-01-preview' = if (!useE
   name: name
   location: location
   tags: tags
-  identity:{
+  identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
       '${managedIdentityId}': {}
     }
   }
   properties: {
-    networkRuleSet: publicNetworkAccess == 'enabled' 
-    ? {}
-    : {
+    networkRuleSet: publicNetworkAccess == 'enabled' ? {} : {
       bypass: 'AzurePortal'
-      ipRules: [
-        {
-          value: myIpAddress
-        }
-      ]
+      ipRules: empty(myIpAddress)
+        ? []
+        : [
+            {
+              value: myIpAddress
+            }
+          ]
     }
     partitionCount: partitionCount
     publicNetworkAccess: publicNetworkAccess
     replicaCount: replicaCount
+    semanticSearch: semanticSearch
     authOptions: {
       aadOrApiKey: {
         aadAuthFailureMode: 'http401WithBearerChallenge'
@@ -69,15 +73,15 @@ resource search 'Microsoft.Search/searchServices@2024-06-01-preview' = if (!useE
 }
 
 module privateEndpoint '../networking/private-endpoint.bicep' = if (!useExistingSearchService && !empty(privateEndpointSubnetId)) {
-    name: '${name}-private-endpoint'
-    params: {
-      location: location
-      privateEndpointName: privateEndpointName
-      groupIds: ['searchService']
-      targetResourceId: search.id
-      subnetId: privateEndpointSubnetId
-    }
+  name: '${name}-private-endpoint'
+  params: {
+    location: location
+    privateEndpointName: privateEndpointName
+    groupIds: ['searchService']
+    targetResourceId: search.id
+    subnetId: privateEndpointSubnetId
   }
+}
 
 // --------------------------------------------------------------------------------------------------------------
 // Outputs

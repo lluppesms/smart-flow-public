@@ -95,6 +95,11 @@ param existing_CogServices_RG_Name string = ''
 @description('Name of an existing Search Services account to use')
 param existing_SearchService_Name string = ''
 
+@description('Friendly name for your Azure AI resource')
+param aiProjectFriendlyName string = 'Agents Project resource'
+@description('Description of your Azure AI resource displayed in AI studio')
+param aiProjectDescription string = 'This is an example AI Project resource for use in Azure AI Studio.'
+
 // --------------------------------------------------------------------------------------------------------------
 // Existing Cosmos resources?
 // --------------------------------------------------------------------------------------------------------------
@@ -252,22 +257,26 @@ module identity './core/iam/identity.bicep' = {
     location: location
   }
 }
-module roleAssignments './core/iam/role-assignments.bicep' = if (addRoleAssignments) {
+module appIdentityRoleAssignments './core/iam/role-assignments.bicep' = if (addRoleAssignments) {
   name: 'identity-access${deploymentSuffix}'
   params: {
+    identityPrincipalId: identity.outputs.managedIdentityPrincipalId
     registryName: containerRegistry.outputs.name
     storageAccountName: storage.outputs.name
-    identityPrincipalId: identity.outputs.managedIdentityPrincipalId
+    aiSearchName: searchService.outputs.name
+    aiServicesName: openAI.outputs.name
   }
 }
 
-module userRoleAssignments './core/iam/role-assignments.bicep' = if (addRoleAssignments && !empty(principalId)) {
+module adminUserRoleAssignments './core/iam/role-assignments.bicep' = if (addRoleAssignments && !empty(principalId)) {
   name: 'user-access${deploymentSuffix}'
   params: {
-    registryName: containerRegistry.outputs.name
-    storageAccountName: storage.outputs.name
     identityPrincipalId: principalId
     principalType: 'User'
+    registryName: containerRegistry.outputs.name
+    storageAccountName: storage.outputs.name
+    aiSearchName: searchService.outputs.name
+    aiServicesName: openAI.outputs.name
   }
 }
 
@@ -478,6 +487,7 @@ module aiHub 'core/ai/ai-hub-secure.bicep' = if (deployAIHub) {
     // dependent resources
     aiServicesId: openAI.outputs.id
     aiServicesTarget: openAI.outputs.endpoint
+    aiSearchName: searchService.outputs.name
     applicationInsightsId: logAnalytics.outputs.applicationInsightsId
     containerRegistryId: containerRegistry.outputs.id
     keyVaultId: keyVault.outputs.id
@@ -492,17 +502,18 @@ module aiHub 'core/ai/ai-hub-secure.bicep' = if (deployAIHub) {
   }
 }
 
-// This is not working right yet... can't find "az" modules...
-// module aiHubProject 'core/ai/ai-hub-project.bicep' = if (deployAIHub) {
-//   name: 'aiHubProject${deploymentSuffix}'
-//   params: {
-//     hubId: aiHub.outputs.id
-//     resourceGroupName: resourceGroupName
-//     projectName: resourceNames.outputs.aiHubProjectName
-//     location: location
-//     managedIdentityId: identity.outputs.managedIdentityId
-//   }
-// }
+module aiProject 'core/ai/ai-hub-project.bicep' = if (deployAIHub) {
+  name: 'aiProject${deploymentSuffix}'
+  params: {
+    aiProjectName: resourceNames.outputs.aiHubProjectName
+    aiProjectFriendlyName: aiProjectFriendlyName
+    aiProjectDescription: aiProjectDescription
+    location: location
+    tags: tags
+    aiHubId: aiHub.outputs.id
+  }
+}
+
 
 // --------------------------------------------------------------------------------------------------------------
 // -- DNS ZONES ---------------------------------------------------------------------------------
