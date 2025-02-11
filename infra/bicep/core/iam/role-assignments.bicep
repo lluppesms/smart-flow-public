@@ -11,7 +11,6 @@ param identityPrincipalId string
 @allowed(['ServicePrincipal', 'User'])
 param principalType string = 'ServicePrincipal'
 
-
 var roleDefinitions = loadJsonContent('../../data/roleDefinitions.json')
 var addRegistryRoles = !empty(registryName)
 var addStorageRoles = !empty(storageAccountName)
