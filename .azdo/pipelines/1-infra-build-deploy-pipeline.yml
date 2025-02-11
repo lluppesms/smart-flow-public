@@ -58,7 +58,7 @@ parameters:
       - API
       - BATCH
       - API-BATCH
-    default: 'API-BATCH'
+    default: 'API'
   - name: buildApps
     displayName: Build Docker Images
     type: boolean

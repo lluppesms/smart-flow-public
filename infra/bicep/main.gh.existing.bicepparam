@@ -23,7 +23,7 @@ param subnet1Prefix = '10.2.0.64/26'
 param subnet2Name = 'snet-app'
 param subnet2Prefix = '10.2.2.0/23'
 
-param existing_ACR_Name = '#{APP_NAME_NO_DASHES}#crdev'
+param existing_ACR_Name = '#{APP_NAME_NO_DASHES}#cr#{envCode}#'
 param existing_ACR_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 
 param existing_SearchService_Name = '#{APP_NAME_NO_DASHES}#-srch-#{envCode}#'
