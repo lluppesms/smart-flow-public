@@ -20,10 +20,10 @@ var addCogServicesRoles = !empty(aiServicesName)
 resource registry 'Microsoft.ContainerRegistry/registries@2023-11-01-preview' existing = if (addRegistryRoles) {
   name: registryName
 }
-resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' existing = if (addStorageRoles) {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing = if (addStorageRoles) {
   name: storageAccountName
 }
-resource aiServices 'Microsoft.CognitiveServices/accounts@2024-06-01-preview' existing = {
+resource aiService 'Microsoft.CognitiveServices/accounts@2024-06-01-preview' existing = {
   name: aiServicesName
   scope: resourceGroup()
 }
@@ -33,7 +33,7 @@ resource searchService 'Microsoft.Search/searchServices@2024-06-01-preview' exis
 }
 
 resource registry_Role_AcrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addRegistryRoles) {
-  name: guid(registryName, identityPrincipalId, roleDefinitions.containerregistry.acrPullRoleId)
+  name: guid(registry.id, identityPrincipalId, roleDefinitions.containerregistry.acrPullRoleId)
   scope: registry
   properties: {
     principalId: identityPrincipalId
@@ -44,8 +44,8 @@ resource registry_Role_AcrPull 'Microsoft.Authorization/roleAssignments@2022-04-
 }
 
 resource storage_Role_BlobContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addStorageRoles) {
-  name: guid(storageAccountName, identityPrincipalId, roleDefinitions.storage.blobDataContributorRoleId)
-  scope: storage
+  name: guid(storageAccount.id, identityPrincipalId, roleDefinitions.storage.blobDataContributorRoleId)
+  scope: storageAccount
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -54,8 +54,8 @@ resource storage_Role_BlobContributor 'Microsoft.Authorization/roleAssignments@2
   }
 }
 resource storage_Role_TableContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addStorageRoles) {
-  name: guid(storageAccountName, identityPrincipalId, roleDefinitions.storage.tableContributorRoleId)
-  scope: storage
+  name: guid(storageAccount.id, identityPrincipalId, roleDefinitions.storage.tableContributorRoleId)
+  scope: storageAccount
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -64,8 +64,8 @@ resource storage_Role_TableContributor 'Microsoft.Authorization/roleAssignments@
   }
 }
 resource storage_Role_QueueContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addStorageRoles) {
-  name: guid(storageAccountName, identityPrincipalId, roleDefinitions.storage.queueDataContributorRoleId)
-  scope: storage
+  name: guid(storageAccount.id, identityPrincipalId, roleDefinitions.storage.queueDataContributorRoleId)
+  scope: storageAccount
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -75,8 +75,8 @@ resource storage_Role_QueueContributor 'Microsoft.Authorization/roleAssignments@
 }
 
 resource cognitiveServices_Role_OpenAIUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addCogServicesRoles) {
-  name: guid(aiServicesName, identityPrincipalId, roleDefinitions.openai.cognitiveServicesOpenAIUserRoleId)
-  scope: aiServices
+  name: guid(aiService.id, identityPrincipalId, roleDefinitions.openai.cognitiveServicesOpenAIUserRoleId)
+  scope: aiService
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -85,8 +85,8 @@ resource cognitiveServices_Role_OpenAIUser 'Microsoft.Authorization/roleAssignme
   }
 }
 resource cognitiveServices_Role_OpenAIContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addCogServicesRoles) {
-  name: guid(aiServicesName, identityPrincipalId, roleDefinitions.openai.cognitiveServicesOpenAIContributorRoleId)
-  scope: aiServices
+  name: guid(aiService.id, identityPrincipalId, roleDefinitions.openai.cognitiveServicesOpenAIContributorRoleId)
+  scope: aiService
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -96,8 +96,8 @@ resource cognitiveServices_Role_OpenAIContributor 'Microsoft.Authorization/roleA
 }
 
 resource cognitiveServices_Role_User 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addCogServicesRoles) {
-  name: guid(resourceGroup().id, identityPrincipalId, roleDefinitions.openai.cognitiveServicesUserRoleId)
-  // TODO: this is assigned on RG level, but should be on the cognitive service level
+  name: guid(aiService.id, identityPrincipalId, roleDefinitions.openai.cognitiveServicesUserRoleId)
+  scope: aiService
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -106,8 +106,8 @@ resource cognitiveServices_Role_User 'Microsoft.Authorization/roleAssignments@20
   }
 }
 resource cognitiveServices_Role_Contributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addCogServicesRoles) {
-  name: guid(resourceGroup().id, identityPrincipalId, roleDefinitions.openai.cognitiveServicesContributorRoleId)
-  // TODO: this is assigned on RG level, but should be on the cognitive service level
+  name: guid(aiService.id, identityPrincipalId, roleDefinitions.openai.cognitiveServicesContributorRoleId)
+  scope: aiService
   properties: {
     principalId: identityPrincipalId
     principalType: principalType
@@ -117,7 +117,7 @@ resource cognitiveServices_Role_Contributor 'Microsoft.Authorization/roleAssignm
 }
 
 resource search_Role_IndexDataContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addSearchRoles) {
-  name: guid(aiSearchName, identityPrincipalId, roleDefinitions.search.indexDataContributorRoleId)
+  name: guid(searchService.id, identityPrincipalId, roleDefinitions.search.indexDataContributorRoleId)
   scope: searchService
   properties: {
     principalId: identityPrincipalId
@@ -127,7 +127,7 @@ resource search_Role_IndexDataContributor 'Microsoft.Authorization/roleAssignmen
   }
 }
 resource search_Role_ServiceContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addSearchRoles) {
-  name: guid(aiSearchName, identityPrincipalId, roleDefinitions.search.serviceContributorRoleId)
+  name: guid(searchService.id, identityPrincipalId, roleDefinitions.search.serviceContributorRoleId)
   scope: searchService
   properties: {
     principalId: identityPrincipalId
