@@ -82,7 +82,7 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
     storageAccount: storageAccountId
     applicationInsights: applicationInsightsId
     containerRegistry: containerRegistryId
-    systemDatastoresAuthMode: 'identity'
+    //systemDatastoresAuthMode: 'identity'
   }
 
   resource aiHubAIServiceConnection 'connections@2024-10-01' = {
