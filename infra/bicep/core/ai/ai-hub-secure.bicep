@@ -6,7 +6,7 @@
 param location string
 
 @description('Set of tags to apply to the Azure AI Hub.')
-param tags object
+param tags object = {}
 
 @description('Name for the Azure AI Hub resource.')
 param aiHubName string

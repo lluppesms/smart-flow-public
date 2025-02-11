@@ -497,7 +497,7 @@ module aiHub 'core/ai/ai-hub-secure.bicep' = if (deployAIHub) {
     addRoleAssignments: addRoleAssignments
     userObjectId: principalId
     userObjectType: 'User'
-    managedIdentityId: identity.outputs.managedIdentityPrincipalId
+    managedIdentityId: identity.outputs.managedIdentityId
     managedIdentityType: 'ServicePrincipal'
   }
 }
