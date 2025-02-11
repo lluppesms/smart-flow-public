@@ -1,7 +1,7 @@
 // Copied from https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.machinelearningservices/aistudio-entraid-passthrough
 // See also https://learn.microsoft.com/en-us/samples/azure-samples/azure-ai-studio-secure-bicep/azure-ai-studio-secure-bicep/
 // Creates an Azure AI Hub resource with proxied endpoints for the Azure AI services provider
-// Test:  az deployment group create -n manual --resource-group rg-sf-gh-base-dev --template-file 'core/ai/ai-hub-secure.bicep' --parameters location=eastus2 aiHubName=yyyyyy-hub-dev aiHubFriendlyName=yyyyyy-hub-dev applicationInsightsId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.Insights/components/yyyyyy-appi-dev containerRegistryId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.ContainerRegistry/registries/yyyyyycrdev keyVaultId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.KeyVault/vaults/yyyyyykvdev storageAccountId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.Storage/storageAccounts/yyyyyystdev aiServicesId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.CognitiveServices/accounts/yyyyyy-cog-dev aiServicesTarget=https://yyyyyy-cog-dev.openai.azure.com/ addRoleAssignments=false userObjectId=yyyyyyy userObjectType=User managedIdentityId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/yyyyyy-app-id managedIdentityType=ServicePrincipal aiSearchName=yyyyyy-srch-dev 
+// Test:  az deployment group create -n manual --resource-group rg-sf-gh-base-dev --template-file 'core/ai/ai-hub-secure.bicep' --parameters location=eastus2 aiHubName=yyyyyy-hub-dev aiHubFriendlyName=yyyyyy-hub-dev applicationInsightsId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.Insights/components/yyyyyy-appi-dev containerRegistryId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.ContainerRegistry/registries/yyyyyycrdev keyVaultId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.KeyVault/vaults/yyyyyykvdev storageAccountId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.Storage/storageAccounts/yyyyyystdev aiServicesId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.CognitiveServices/accounts/yyyyyy-cog-dev aiServicesTarget=https://yyyyyy-cog-dev.openai.azure.com/ addRoleAssignments=false userObjectId=yyyyyyy userObjectType=User managedIdentityPrincipalId=/subscriptions/xxxxxx/resourceGroups/rg-sf-gh-base-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/yyyyyy-app-id managedIdentityType=ServicePrincipal aiSearchName=yyyyyy-srch-dev 
 
 @description('Azure region used for the deployment of the Azure AI Hub.')
 param location string
@@ -43,8 +43,10 @@ param addRoleAssignments bool = true
 param userObjectId string = ''
 param userObjectType string = 'User'
 
-@description('The object ID of the application identity to be granted necessary role assignments to access the Azure AI Hub.')
-param managedIdentityId string = ''
+// @description('The object ID of the application identity to be granted necessary role assignments to access the Azure AI Hub.')
+// param managedIdentityResourceId string = ''
+@description('The principal ID of the application identity to be granted necessary role assignments to access the Azure AI Hub.')
+param managedIdentityPrincipalId string = ''
 param managedIdentityType string = 'ServicePrincipal'
 
 @description('Name AI Search resource')
@@ -67,7 +69,7 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
     // tried this but it keeps getting a 400 error with not other details...?
     // type: 'UserAssigned'
     // userAssignedIdentities: {
-    //   '${managedIdentityId}': {}
+    //   '${managedIdentityResourceId}': {}
     // }
   }
   properties: {
@@ -124,14 +126,14 @@ resource adminRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01
   }
 }
 
-resource applicationAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addRoleAssignments && managedIdentityId != '') {
-  name: guid(aiHub.id, managedIdentityId, 'dataScientistRole')
+resource applicationAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addRoleAssignments && managedIdentityPrincipalId != '') {
+  name: guid(aiHub.id, managedIdentityPrincipalId, 'dataScientistRole')
   scope: aiHub
   properties: {
-    principalId: managedIdentityId
+    principalId: managedIdentityPrincipalId
     principalType: managedIdentityType
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitions.ml.dataScientistRole)
-    description: 'Permission for application ${managedIdentityId} to use ${aiHubName}'
+    description: 'Permission for application ${managedIdentityPrincipalId} to use ${aiHubName}'
   }
 }
 
