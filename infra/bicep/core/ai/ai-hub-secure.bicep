@@ -49,14 +49,14 @@ param managedIdentityType string = 'ServicePrincipal'
 @description('Name AI Search resource')
 param aiSearchName string
 
-var acsConnectionName = '${aiHubName}-connection-AISearch'
-var aoaiConnectionName  = '${aiHubName}-connection-AIServices_aoai'
+var aiServiceConnectionName = '${aiHubName}-connection-AIService'
+var searchConnectionName  = '${aiHubName}-connection-AISearch'
 
-resource aisearch 'Microsoft.Search/searchServices@2020-03-13' existing = {
+resource aiSearch 'Microsoft.Search/searchServices@2020-03-13' existing = {
   name: aiSearchName
 }
 
-resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
+resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
   name: aiHubName
   location: location
   tags: tags
@@ -78,8 +78,8 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview'
     systemDatastoresAuthMode: 'identity'
   }
 
-  resource aiServicesConnection 'connections@2024-10-01' = {
-    name: aoaiConnectionName
+  resource aiHubAIServiceConnection 'connections@2024-10-01' = {
+    name: aiServiceConnectionName
     properties: {
       category: 'AzureOpenAI'
       target: aiServicesTarget
@@ -92,8 +92,8 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview'
     }
   }
 
-  resource hub_connection_azureai_search 'connections@2024-07-01-preview' = {
-    name: acsConnectionName
+  resource aiHubSearchConnection 'connections@2024-07-01-preview' = {
+    name: searchConnectionName
     properties: {
       category: 'CognitiveSearch'
       target: 'https://${aiSearchName}.search.windows.net'
@@ -102,27 +102,11 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview'
       isSharedToAll: true
       metadata: {
         ApiType: 'Azure'
-        ResourceId: aisearch.id
-        location: aisearch.location
+        ResourceId: aiSearch.id
+        location: aiSearch.location
       }
     }
   }
-  
-  // This fails...
-  // resource aiServicesConnection 'connections@2024-04-01-preview' = {
-  //   name: '${aiHubName}-connection'
-  //   properties: {
-  //     category: 'OpenAI'        // Error: Unsupported authtype AAD for OpenAI (Code: ValidationError)
-  //     // category: 'AIServices' // Error: The associated account is of kind OpenAI. Please provide an account of kind AIServices. 
-  //     target: aiServicesTarget
-  //     authType: 'AAD'
-  //     isSharedToAll: true
-  //     metadata: {
-  //       ApiType: 'Azure'
-  //       ResourceId: aiServicesId
-  //     }
-  //   }
-  // }
 }
 
 var roleDefinitions = loadJsonContent('../../data/roleDefinitions.json')
@@ -150,5 +134,5 @@ resource applicationAssignment 'Microsoft.Authorization/roleAssignments@2022-04-
 
 output id string = aiHub.id
 output name string = aiHub.name
-output aoaiConnectionName string = aoaiConnectionName
-output acsConnectionName string = acsConnectionName
+output aiServiceConnectionName string = aiServiceConnectionName
+output searchConnectionName string = searchConnectionName
