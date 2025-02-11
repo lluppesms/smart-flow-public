@@ -92,5 +92,5 @@ output endpoint string = useExistingSearchService ? 'https://${existingSearchSer
 output resourceGroupName string = resourceGroupName
 output searchKeySecretName string = searchKeySecretName
 output keyVaultSecretName string = searchKeySecretName
-output privateEndpointId string = empty(privateEndpointSubnetId) ? '' : privateEndpoint.outputs.privateEndpointId
+output privateEndpointId string = !useExistingSearchService && !empty(privateEndpointSubnetId) ? '' : privateEndpoint.outputs.privateEndpointId
 output privateEndpointName string = privateEndpointName
