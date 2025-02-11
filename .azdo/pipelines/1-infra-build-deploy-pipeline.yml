@@ -23,7 +23,7 @@ trigger:
 # ----------------------------------------------------------------------------------------------------
 parameters:
   - name: deployToEnvironment
-    displayName: Deploy To
+    displayName: 'Deploy To:'
     type: string
     values:
       - DEV
@@ -31,6 +31,10 @@ parameters:
       - PROD
       - DEV-PROD
     default: DEV
+  - name: parameterFileName
+    displayName: 'Bicep Parameter File:'
+    type: string
+    default: 'main.azdo.bicepparam'
   - name: createResourceGroup
     displayName: Create Resource Group?
     type: boolean
@@ -80,8 +84,6 @@ parameters:
 variables:
   - group: AI.Doc.Review.Keys
   - template: vars/var-service-connections.yml
-  - name: deployBatchApp
-    value: ${{ contains(parameters.apps, 'BATCH') }}
 
 # ----------------------------------------------------------------------------------------------------
 stages:
@@ -99,12 +101,15 @@ stages:
   - template: pipes/infra-only-pipe.yml
     parameters:
       environments: ['${{ parameters.deployToEnvironment }}']
+      templateFolderName: 'infra/bicep'
+      templateFileName: 'main.bicep'
+      parameterFileName: ${{ parameters.parameterFileName }}
       singleEnvironment: 'true'
       createResourceGroup: ${{ parameters.createResourceGroup }}
       publicAccessEnabled: ${{ parameters.publicAccessEnabled }}
       createDnsZones: ${{ parameters.createDnsZones }}
       deployAIHub: ${{ parameters.deployAIHub }}
-      deployBatchApp: $(deployBatchApp)
+      deployBatchApp: ${{ contains(parameters.apps, 'BATCH') }}
       addRoleAssignments: ${{ parameters.addRoleAssignments }}
       runMSDevSecOpsScan: false
       runGHASScan: false
@@ -114,11 +119,14 @@ stages:
     dependsOn: ScanApplication
     parameters:
       environments: ['DEV', 'PROD']
+      templateFolderName: 'infra/bicep'
+      templateFileName: 'main.bicep'
+      parameterFileName: ${{ parameters.parameterFileName }}
       createResourceGroup: ${{ parameters.createResourceGroup }}
       publicAccessEnabled: ${{ parameters.publicAccessEnabled }}
       createDnsZones: ${{ parameters.createDnsZones }}
       deployAIHub: ${{ parameters.deployAIHub }}
-      deployBatchApp: $(deployBatchApp)
+      deployBatchApp: ${{ contains(parameters.apps, 'BATCH') }}
       addRoleAssignments: ${{ parameters.addRoleAssignments }}
       runMSDevSecOpsScan: false
       runGHASScan: false

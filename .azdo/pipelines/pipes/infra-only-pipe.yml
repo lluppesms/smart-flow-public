@@ -5,6 +5,12 @@ parameters:
   - name: environments
     type: object
     default: ['DEV']
+  - name: templateFolderName
+    default: 'infra/bicep'
+  - name: templateFileName
+    default: 'main.bicep'
+  - name: parameterFileName
+    default: 'main.azdo.bicepparam'
   - name: deploymentMode
     default: 'Incremental'
   - name: singleEnvironment
@@ -54,6 +60,9 @@ stages:
           - template: templates/create-infra-template.yml
             parameters:
               environmentName: ${{ environmentName }}
+              templateFolderName: ${{ parameters.templateFolderName }}
+              templateFileName: ${{ parameters.templateFileName }}
+              parameterFileName: ${{ parameters.parameterFileName }}
               createResourceGroup: ${{ parameters.createResourceGroup }}
               publicAccessEnabled: ${{ parameters.publicAccessEnabled }}
               createDnsZones: ${{ parameters.createDnsZones }}
