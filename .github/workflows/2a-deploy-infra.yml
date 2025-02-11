@@ -56,7 +56,7 @@ on:
       runBuildDeployBatch:
         description: 'Build and Deploy Batch'
         required: false
-        default: true
+        default: false
         type: boolean
           
 jobs:
