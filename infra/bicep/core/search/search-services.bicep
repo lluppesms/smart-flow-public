@@ -73,6 +73,9 @@ resource search 'Microsoft.Search/searchServices@2024-06-01-preview' = if (!useE
   sku: sku
 }
 
+resource existingPrivateEndpoint 'Microsoft.Network/privateEndpoints@2023-06-01' existing = if (useExistingSearchService && !empty(privateEndpointSubnetId)) {
+  name: privateEndpointName
+}
 module privateEndpoint '../networking/private-endpoint.bicep' = if (!useExistingSearchService && !empty(privateEndpointSubnetId)) {
   name: '${name}-private-endpoint'
   params: {
@@ -93,5 +96,5 @@ output endpoint string = useExistingSearchService ? 'https://${existingSearchSer
 output resourceGroupName string = resourceGroupName
 output searchKeySecretName string = searchKeySecretName
 output keyVaultSecretName string = searchKeySecretName
-output privateEndpointId string = !useExistingSearchService && !empty(privateEndpointSubnetId) ? '' : privateEndpoint.outputs.privateEndpointId
+output privateEndpointId string = empty(privateEndpointSubnetId) ? '' : useExistingSearchService ? existingPrivateEndpoint.id : privateEndpoint.outputs.privateEndpointId
 output privateEndpointName string = privateEndpointName
