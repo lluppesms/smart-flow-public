@@ -17,6 +17,8 @@ parameters:
     default: true
   - name: deployAIHub
     default: true
+  - name: deployBatchApp
+    default: true
   - name: addRoleAssignments
     default: true
   - name: runGHASScan
@@ -56,5 +58,6 @@ stages:
               publicAccessEnabled: ${{ parameters.publicAccessEnabled }}
               createDnsZones: ${{ parameters.createDnsZones }}
               deployAIHub: ${{ parameters.deployAIHub }}
+              deployBatchApp: ${{ parameters.deployBatchApp }}
               addRoleAssignments: ${{ parameters.addRoleAssignments }}
               deploymentMode: ${{ parameters.deploymentMode }}

@@ -80,6 +80,8 @@ parameters:
 variables:
   - group: AI.Doc.Review.Keys
   - template: vars/var-service-connections.yml
+  - name: deployBatchApp
+    value: ${{ contains(parameters.apps, 'BATCH') }}
 
 # ----------------------------------------------------------------------------------------------------
 stages:
@@ -102,6 +104,7 @@ stages:
       publicAccessEnabled: ${{ parameters.publicAccessEnabled }}
       createDnsZones: ${{ parameters.createDnsZones }}
       deployAIHub: ${{ parameters.deployAIHub }}
+      deployBatchApp: $(deployBatchApp)
       addRoleAssignments: ${{ parameters.addRoleAssignments }}
       runMSDevSecOpsScan: false
       runGHASScan: false
@@ -115,6 +118,7 @@ stages:
       publicAccessEnabled: ${{ parameters.publicAccessEnabled }}
       createDnsZones: ${{ parameters.createDnsZones }}
       deployAIHub: ${{ parameters.deployAIHub }}
+      deployBatchApp: $(deployBatchApp)
       addRoleAssignments: ${{ parameters.addRoleAssignments }}
       runMSDevSecOpsScan: false
       runGHASScan: false
