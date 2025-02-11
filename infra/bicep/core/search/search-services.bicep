@@ -19,8 +19,9 @@ param partitionCount int = 1
 param publicNetworkAccess string = 'disabled'
 param replicaCount int = 1
 
-@description('Optional. Sets options that control the availability of semantic search. This configuration is only possible for certain search SKUs in certain locations.')
-param semanticSearch string?
+@allowed(['disabled', 'free', 'standard'])
+@description('Optional. Sets options that control the availability of semantic search. This configuration is only possible for certain search SKUs in certain locations. Free Sku = disabled')
+param semanticSearch string = 'standard'
 
 param privateEndpointSubnetId string = ''
 param privateEndpointName string = ''
