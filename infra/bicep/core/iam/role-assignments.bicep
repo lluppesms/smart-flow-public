@@ -2,6 +2,7 @@
 // NOTE: this requires elevated permissions in the resource group
 // Contributor is not enough, you need Owner or User Access Administrator
 // See https://docs.microsoft.com/azure/role-based-access-control/role-assignments-template#new-service-principal
+// For Role Id's see https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 
 param registryName string = ''
 param storageAccountName string = ''
@@ -124,6 +125,16 @@ resource search_Role_IndexDataContributor 'Microsoft.Authorization/roleAssignmen
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitions.search.indexDataContributorRoleId)
     principalType: principalType
     description: 'Permission for ${principalType} ${identityPrincipalId} to use the modify search service indexes'
+  }
+}
+resource search_Role_IndexDataReader 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addSearchRoles) {
+  name: guid(searchService.id, identityPrincipalId, roleDefinitions.search.indexDataReaderRoleId)
+  scope: searchService
+  properties: {
+    principalId: identityPrincipalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitions.search.indexDataReaderRoleId)
+    principalType: principalType
+    description: 'Permission for ${principalType} ${identityPrincipalId} to use the read search service indexes'
   }
 }
 resource search_Role_ServiceContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addSearchRoles) {
