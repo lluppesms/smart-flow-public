@@ -1,11 +1,11 @@
-// ----------------------------------------------------------------------------------------------------
-// Switched to do role assignments at the resource group level
-// ----------------------------------------------------------------------------------------------------
+// // ----------------------------------------------------------------------------------------------------
 // // Assign roles to the service principal or a given user
+// // ----------------------------------------------------------------------------------------------------
 // // NOTE: this requires elevated permissions in the resource group
 // // Contributor is not enough, you need Owner or User Access Administrator
-// // See https://docs.microsoft.com/azure/role-based-access-control/role-assignments-template#new-service-principal
-// // For Role Id's see https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+// // ----------------------------------------------------------------------------------------------------
+// // For a list of Role Id's see https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+// // ----------------------------------------------------------------------------------------------------
 
 // param registryName string = ''
 // param storageAccountName string = ''
