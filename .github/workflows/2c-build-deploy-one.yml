@@ -118,6 +118,7 @@ jobs:
       actions: read
       contents: write
       checks: write
+      security-events: write
 
   # ------------------------------------------------------------------------------------------------------------------------
   build-api:
