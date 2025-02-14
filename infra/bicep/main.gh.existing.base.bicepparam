@@ -16,23 +16,21 @@ param principalId = '#{ADMIN_PRINCIPAL_ID}#'
 param deployAIHub = #{deployAIHub}#
 param deployBatchApp = #{deployBatchApp}#
 
-param existingVnetName = '#{APP_NAME_NO_DASHES}#-vnet-dev'
+param existingVnetName = 'llsfazbase-vnet-dev'
 param vnetPrefix = '10.2.0.0/16'
 param subnet1Name = 'snet-prv-endpoint'
 param subnet1Prefix = '10.2.0.64/26'
 param subnet2Name = 'snet-app'
 param subnet2Prefix = '10.2.2.0/23'
 
-param existing_ACR_Name = '#{APP_NAME_NO_DASHES}#cr#{envCode}#'
-param existing_ACR_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
+param existing_ACR_Name = 'llsfazbasecrdev'
+param existing_ACR_ResourceGroupName = 'rg-sf-az-base-dev'
+param existing_SearchService_Name = 'llsfazbase-srch-dev'
+param existing_CogServices_Name = 'llsfazbase-cog-dev'
+param existing_CogServices_RG_Name = 'rg-sf-az-base-dev'
+param existing_CosmosAccount_Name = 'llsfazbase-cosmos-dev'
+param existingKeyVaultName = 'llsfazbasekvdev'
 
-param existing_SearchService_Name = '#{APP_NAME_NO_DASHES}#-srch-#{envCode}#'
-param existing_CogServices_Name = '#{APP_NAME_NO_DASHES}#-cog-#{envCode}#'
-param existing_CogServices_RG_Name = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
-
-param existingKeyVaultName = '#{APP_NAME_NO_DASHES}#kv#{envCode}#'
-
-param existing_LogAnalytics_Name = '#{APP_NAME_NO_DASHES}#-log-#{envCode}#'
-param existing_AppInsights_Name = '#{APP_NAME_NO_DASHES}#-appi-#{envCode}#'
-param existing_CosmosAccount_Name = '#{APP_NAME_NO_DASHES}#-cosmos-#{envCode}#'
-param existing_managedAppEnv_Name = '#{APP_NAME_NO_DASHES}#-cae-#{envCode}#'
+// param existing_LogAnalytics_Name = '#{APP_NAME_NO_DASHES}#-log-#{envCode}#'
+// param existing_AppInsights_Name = '#{APP_NAME_NO_DASHES}#-appi-#{envCode}#'
+// param existing_managedAppEnv_Name = '#{APP_NAME_NO_DASHES}#-cae-#{envCode}#'

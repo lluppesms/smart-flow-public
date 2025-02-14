@@ -107,6 +107,12 @@ param aiProjectDescription string = 'This is an example AI Project resource for 
 param existing_CosmosAccount_Name string = ''
 
 // --------------------------------------------------------------------------------------------------------------
+// Existing Key Vault?
+// --------------------------------------------------------------------------------------------------------------
+@description('Name of an existing Key Vault to use')
+param existingKeyVaultName string = ''
+
+// --------------------------------------------------------------------------------------------------------------
 // AI Hub Parameters
 // --------------------------------------------------------------------------------------------------------------
 @description('Should we deploy an AI Foundry Hub?')
@@ -287,6 +293,7 @@ module keyVault './core/security/keyvault.bicep' = {
     location: location
     commonTags: tags
     keyVaultName: resourceNames.outputs.keyVaultName
+    existingKeyVaultName: existingKeyVaultName
     keyVaultOwnerUserId: principalId
     adminUserObjectIds: [identity.outputs.managedIdentityPrincipalId]
     publicNetworkAccess: publicAccessEnabled ? 'Enabled' : 'Disabled'

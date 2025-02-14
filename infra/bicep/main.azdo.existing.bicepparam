@@ -30,6 +30,8 @@ param existing_SearchService_Name = '#{appNameLowerNoDashes}#-srch-#{environment
 param existing_CogServices_Name = '#{appNameLowerNoDashes}#-cog-#{environmentNameLower}#'
 param existing_CogServices_RG_Name = '#{resourceGroupPrefix}#-#{environmentNameLower}#'
 
+param existingKeyVaultName = '#{appNameLowerNoDashes}#kv#{environmentNameLower}#'
+
 param existing_LogAnalytics_Name = '#{appNameLowerNoDashes}#-log-#{environmentNameLower}#'
 param existing_AppInsights_Name = '#{appNameLowerNoDashes}#-appi-#{environmentNameLower}#'
 param existing_CosmosAccount_Name = '#{appNameLowerNoDashes}#-cosmos-#{environmentNameLower}#'
