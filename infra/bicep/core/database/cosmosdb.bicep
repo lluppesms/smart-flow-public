@@ -10,7 +10,7 @@
 @description('Cosmos DB account name')
 param accountName string = 'sql-${uniqueString(resourceGroup().id)}'
 param existingAccountName string = ''
-param existingCosmosResourceGroupName string = ''
+param existingCosmosResourceGroupName string = resourceGroup().name
 
 @description('The name for the SQL database')
 param databaseName string

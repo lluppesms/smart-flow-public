@@ -1,5 +1,5 @@
 param existing_CogServices_Name string = ''
-param existing_CogServices_ResourceGroupName string = ''
+param existing_CogServices_ResourceGroupName string = resourceGroup().name
 param name string = ''
 param location string = resourceGroup().location
 param pe_location string = location

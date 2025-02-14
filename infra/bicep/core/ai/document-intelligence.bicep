@@ -1,5 +1,5 @@
-param existing_CogServices_Name string
-param existing_CogServices_ResourceGroupName string
+param existing_CogServices_Name string = ''
+param existing_CogServices_ResourceGroupName string = resourceGroup().name
 param name string = ''
 param location string = resourceGroup().location
 param pe_location string = location
@@ -73,6 +73,6 @@ module privateEndpoint '../networking/private-endpoint.bicep' = if (!useExisting
 output id string = useExistingService  ? existingAccount.id : account.id
 output name string = useExistingService  ? existingAccount.name : account.name
 output endpoint string = useExistingService ? existingAccount.properties.endpoint : account.properties.endpoint
-output resourceGroupName string = useExistingService  ? existing_CogServices_ResourceGroupName : resourceGroupName
+output resourceGroupName string = useExistingService ? existing_CogServices_ResourceGroupName : resourceGroupName
 output keyVaultSecretName string = cognitiveServicesKeySecretName
 output privateEndpointName string = privateEndpointName

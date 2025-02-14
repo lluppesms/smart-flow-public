@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 
 param existingVirtualNetworkName string = ''
-param existingVnetResourceGroupName string = ''
+param existingVnetResourceGroupName string = resourceGroup().name
 param newVirtualNetworkName string = ''
 param vnetAddressPrefix string
 param subnet1Name string

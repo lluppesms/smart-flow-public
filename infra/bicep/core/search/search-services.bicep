@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 param tags object = {}
 
 param existingSearchServiceName string = ''
-param existingSearchServiceResourceGroupName string = ''
+param existingSearchServiceResourceGroupName string = resourceGroup().name
 
 param sku object = {
   name: 'standard'
