@@ -16,13 +16,14 @@ param principalId = '#{ADMIN_PRINCIPAL_ID}#'
 param deployAIHub = #{deployAIHub}#
 param deployBatchApp = #{deployBatchApp}#
 
-param existingVnetName = 'llsfazbase-vnet-dev'
-param existingVnetResourceGroupName = 'rg-sf-az-base-dev'
-param vnetPrefix = '10.2.0.0/16'
-param subnet1Name = 'snet-prv-endpoint'
-param subnet1Prefix = '10.2.0.64/26'
-param subnet2Name = 'snet-app'
-param subnet2Prefix = '10.2.2.0/23'
+// Can't seem to get this to work...  
+// param existingVnetName = 'llsfazbase-vnet-dev'
+// param existingVnetResourceGroupName = 'rg-sf-az-base-dev'
+// param vnetPrefix = '10.2.0.0/16'
+// param subnet1Name = 'snet-prv-endpoint'
+// param subnet1Prefix = '10.2.0.64/26'
+// param subnet2Name = 'snet-app'
+// param subnet2Prefix = '10.2.2.0/23'
 
 param existing_ACR_Name = 'llsfazbasecrdev'
 param existing_ACR_ResourceGroupName = 'rg-sf-az-base-dev'
