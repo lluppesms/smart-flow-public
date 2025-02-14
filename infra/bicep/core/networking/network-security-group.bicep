@@ -28,11 +28,39 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-0
         properties: {
           protocol: '*'
           sourcePortRange: '*'
+          destinationPortRange: '8080'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 110
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'AllowAnyCustom8080Inbound'
+        type: 'Microsoft.Network/networkSecurityGroups/securityRules'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '443'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 120
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'AllowAnyCustom8080Inbound'
+        type: 'Microsoft.Network/networkSecurityGroups/securityRules'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
           destinationPortRange: '80'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           access: 'Allow'
-          priority: 101
+          priority: 130
           direction: 'Inbound'
         }
       }
