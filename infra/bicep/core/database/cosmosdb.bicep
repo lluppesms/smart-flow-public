@@ -10,6 +10,7 @@
 @description('Cosmos DB account name')
 param accountName string = 'sql-${uniqueString(resourceGroup().id)}'
 param existingAccountName string = ''
+param existingCosmosResourceGroupName string = ''
 
 @description('The name for the SQL database')
 param databaseName string
@@ -43,6 +44,7 @@ var useExistingAccount = !empty(existingAccountName)
 // --------------------------------------------------------------------------------------------------------------
 resource existingCosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2024-08-15' existing = if (useExistingAccount) {
   name: existingAccountName
+  scope: resourceGroup(existingCosmosResourceGroupName)
 }
 
 // --------------------------------------------------------------------------------------------------------------

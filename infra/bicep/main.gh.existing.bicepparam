@@ -31,9 +31,13 @@ param existing_SearchService_Name = '#{APP_NAME_NO_DASHES}#-srch-#{envCode}#'
 param existing_CogServices_Name = '#{APP_NAME_NO_DASHES}#-cog-#{envCode}#'
 param existing_CogServices_RG_Name = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 
-param existingKeyVaultName = '#{APP_NAME_NO_DASHES}#kv#{envCode}#'
+param existing_CosmosAccount_Name = '#{APP_NAME_NO_DASHES}#-cosmos-#{envCode}#'
+param existing_Cosmos_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
+
+param existing_KeyVault_Name = '#{APP_NAME_NO_DASHES}#kv#{envCode}#'
+param existing_KeyVault_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 
 param existing_LogAnalytics_Name = '#{APP_NAME_NO_DASHES}#-log-#{envCode}#'
 param existing_AppInsights_Name = '#{APP_NAME_NO_DASHES}#-appi-#{envCode}#'
-param existing_CosmosAccount_Name = '#{APP_NAME_NO_DASHES}#-cosmos-#{envCode}#'
+
 param existing_managedAppEnv_Name = '#{APP_NAME_NO_DASHES}#-cae-#{envCode}#'

@@ -25,14 +25,21 @@ param deployBatchApp = #{deployBatchApp}#
 // param subnet2Name = 'snet-app'
 // param subnet2Prefix = '10.2.2.0/23'
 
-param existing_ACR_Name = 'llsfazbasecrdev'
-param existing_ACR_ResourceGroupName = 'rg-sf-az-base-dev'
+// I didn't save this resource...
+// param existing_ACR_Name = 'llsfazbasecrdev'
+// param existing_ACR_ResourceGroupName = 'rg-sf-az-base-dev'
+
 param existing_SearchService_Name = 'llsfazbase-srch-dev'
 param existing_CogServices_Name = 'llsfazbase-cog-dev'
 param existing_CogServices_RG_Name = 'rg-sf-az-base-dev'
+
 param existing_CosmosAccount_Name = 'llsfazbase-cosmos-dev'
-param existingKeyVaultName = 'llsfazbasekvdev'
+param existing_Cosmos_ResourceGroupName = 'rg-sf-az-base-dev'
+
+param existing_KeyVault_Name = 'llsfazbasekvdev'
+param existing_KeyVault_ResourceGroupName = 'rg-sf-az-base-dev'
 
 // param existing_LogAnalytics_Name = '#{APP_NAME_NO_DASHES}#-log-#{envCode}#'
 // param existing_AppInsights_Name = '#{APP_NAME_NO_DASHES}#-appi-#{envCode}#'
+
 // param existing_managedAppEnv_Name = '#{APP_NAME_NO_DASHES}#-cae-#{envCode}#'

@@ -4,6 +4,7 @@
 // --------------------------------------------------------------------------------
 param keyVaultName string = ''
 param existingKeyVaultName string = ''
+param existingKeyVaultResourceGroupName string = ''
 param location string = resourceGroup().location
 param commonTags object = {}
 
@@ -104,6 +105,7 @@ var kvIpRules = keyVaultOwnerIpAddress == '' ? [] : [
 // --------------------------------------------------------------------------------
 resource existingKeyVaultResource 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = if (useExistingVault) {
   name: existingKeyVaultName
+  scope: resourceGroup(existing_KeyVault_ResourceGroupName)
 }
 resource keyVaultResource 'Microsoft.KeyVault/vaults@2021-11-01-preview' = if (!useExistingVault) {
   name: keyVaultName

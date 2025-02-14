@@ -92,7 +92,7 @@ param containerAppEnvironmentWorkloadProfiles array = [
 // --------------------------------------------------------------------------------------------------------------
 @description('Name of an existing Cognitive Services account to use')
 param existing_CogServices_Name string = ''
-@description('Name of ResourceGroup for an existing Cognitive Services account to use')
+@description('Resource Group where existing Cognitive Services account Lives')
 param existing_CogServices_RG_Name string = ''
 @description('Name of an existing Search Services account to use')
 param existing_SearchService_Name string = ''
@@ -107,12 +107,16 @@ param aiProjectDescription string = 'This is an example AI Project resource for 
 // --------------------------------------------------------------------------------------------------------------
 @description('Name of an existing Cosmos account to use')
 param existing_CosmosAccount_Name string = ''
+@description('Resource Group where existing Cosmos account Lives')
+param existing_Cosmos_ResourceGroupName string = ''
 
 // --------------------------------------------------------------------------------------------------------------
 // Existing Key Vault?
 // --------------------------------------------------------------------------------------------------------------
 @description('Name of an existing Key Vault to use')
-param existingKeyVaultName string = ''
+param existing_KeyVault_Name string = ''
+@description('Resource Group where existing Key Vault Lives')
+param existing_KeyVault_ResourceGroupName string = ''
 
 // --------------------------------------------------------------------------------------------------------------
 // AI Hub Parameters
@@ -296,7 +300,8 @@ module keyVault './core/security/keyvault.bicep' = {
     location: location
     commonTags: tags
     keyVaultName: resourceNames.outputs.keyVaultName
-    existingKeyVaultName: existingKeyVaultName
+    existingKeyVaultName: existing_KeyVault_Name
+    existingKeyVaultResourceGroupName: existing_KeyVault_ResourceGroupName
     keyVaultOwnerUserId: principalId
     adminUserObjectIds: [identity.outputs.managedIdentityPrincipalId]
     publicNetworkAccess: publicAccessEnabled ? 'Enabled' : 'Disabled'
@@ -395,6 +400,7 @@ module cosmos './core/database/cosmosdb.bicep' = {
   params: {
     accountName: resourceNames.outputs.cosmosName
     existingAccountName: existing_CosmosAccount_Name
+    existingCosmosResourceGroupName: existing_Cosmos_ResourceGroupName
     databaseName: uiDatabaseName
     containerArray: cosmosContainerArray
     location: location
