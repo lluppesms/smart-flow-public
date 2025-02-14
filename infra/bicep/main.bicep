@@ -41,6 +41,8 @@ param principalId string = ''
 // --------------------------------------------------------------------------------------------------------------
 @description('If you provide this is will be used instead of creating a new VNET')
 param existingVnetName string = ''
+@description('If you provide an existing VNET what resource group is it in?')
+param existingVnetResourceGroupName string = ''
 @description('If you provide this is will be used instead of creating a new VNET')
 param vnetPrefix string = '10.2.0.0/16'
 @description('If new VNET, this is the Subnet name for the private endpoints')
@@ -190,6 +192,7 @@ module vnet './core/networking/vnet.bicep' = {
   params: {
     location: location
     existingVirtualNetworkName: existingVnetName
+    existingVnetResourceGroupName: existingVnetResourceGroupName
     newVirtualNetworkName: resourceNames.outputs.vnet_Name
     vnetAddressPrefix: vnetPrefix
     subnet1Name: !empty(subnet1Name) ? subnet1Name : resourceNames.outputs.vnetPeSubnetName

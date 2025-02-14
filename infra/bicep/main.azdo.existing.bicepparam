@@ -17,6 +17,7 @@ param deployAIHub = #{deployAIHub}#
 param deployBatchApp = #{deployBatchApp}#
 
 param existingVnetName = '#{appNameLowerNoDashes}#-vnet-dev'
+param existingVnetResourceGroupName = '#{resourceGroupPrefix}#-#{environmentNameLower}#'
 param vnetPrefix = '10.2.0.0/16'
 param subnet1Name = 'snet-prv-endpoint'
 param subnet1Prefix = '10.2.0.64/26'

@@ -1,6 +1,7 @@
 param location string = resourceGroup().location
 
 param existingVirtualNetworkName string = ''
+param existingVnetResourceGroupName string = ''
 param newVirtualNetworkName string = ''
 param vnetAddressPrefix string
 param subnet1Name string
@@ -12,6 +13,7 @@ var useExistingResource = !empty(existingVirtualNetworkName)
 
 resource existingVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' existing = if (useExistingResource) {
   name: existingVirtualNetworkName
+  scope: resourceGroup(existingVnetResourceGroupName)
   resource subnet1 'subnets' existing = {
     name: subnet1Name
   }

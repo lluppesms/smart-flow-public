@@ -16,7 +16,8 @@ param principalId = '#{ADMIN_PRINCIPAL_ID}#'
 param deployAIHub = #{deployAIHub}#
 param deployBatchApp = #{deployBatchApp}#
 
-// param existingVnetName = 'vnetxxxxxxx'
+// param existingVnetName = '#{APP_NAME_NO_DASHES}#-vnet-#{envCode}#'
+// param existingVnetResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 // param vnetPrefix = '10.2.0.0/16'
 // param subnet1Name = ''
 // param subnet1Prefix = '10.2.0.64/26'
