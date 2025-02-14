@@ -29,11 +29,13 @@ param deployBatchApp = #{deployBatchApp}#
 // param existing_ACR_Name = 'llsfazbasecrdev'
 // param existing_ACR_ResourceGroupName = 'rg-sf-az-base-dev'
 
-param existing_SearchService_Name = 'llsfazbase-srch-dev'
 param existing_CogServices_Name = 'llsfazbase-cog-dev'
-param existing_CogServices_RG_Name = 'rg-sf-az-base-dev'
+param existing_CogServices_ResourceGroupName = 'rg-sf-az-base-dev'
 
-param existing_CosmosAccount_Name = 'llsfazbase-cosmos-dev'
+param existing_SearchService_Name = 'llsfazbase-srch-dev'
+param existing_SearchService_ResourceGroupName  string = ''
+
+param existing_Cosmos_Name = 'llsfazbase-cosmos-dev'
 param existing_Cosmos_ResourceGroupName = 'rg-sf-az-base-dev'
 
 param existing_KeyVault_Name = 'llsfazbasekvdev'

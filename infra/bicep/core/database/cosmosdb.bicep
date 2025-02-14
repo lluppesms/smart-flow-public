@@ -177,6 +177,7 @@ resource cosmosDbUserAccessRoleAssignment 'Microsoft.DocumentDB/databaseAccounts
 // --------------------------------------------------------------------------------------------------------------
 output id string = useExistingAccount ? existingCosmosAccount.id : cosmosAccount.id
 output name string = useExistingAccount ? existingCosmosAccount.name : cosmosAccount.name
+output resourceGroupName string = useExistingAccount ? existingCosmosResourceGroupName : resourceGroup().name
 output endpoint string = useExistingAccount ? existingCosmosAccount.properties.documentEndpoint : cosmosAccount.properties.documentEndpoint
 output keyVaultSecretName string = connectionStringSecretName
 output privateEndpointName string = privateEndpointName

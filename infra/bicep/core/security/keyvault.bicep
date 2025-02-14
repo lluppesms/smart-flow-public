@@ -225,6 +225,7 @@ module privateEndpoint '../networking/private-endpoint.bicep' = if (!useExisting
 
 // --------------------------------------------------------------------------------
 output name string = useExistingVault ? existingKeyVaultResource.name : keyVaultResource.name
+output resourceGroupName string = useExistingVault ? existingKeyVaultResourceGroupName : resourceGroup().name
 output id string = useExistingVault ? existingKeyVaultResource.id : keyVaultResource.id
 output userManagedIdentityId string = useExistingVault ? '' : createUserAssignedIdentity ? userAssignedIdentity.id : ''
 output endpoint string = useExistingVault ? existingKeyVaultResource.properties.vaultUri : keyVaultResource.properties.vaultUri

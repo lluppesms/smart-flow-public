@@ -27,11 +27,13 @@ param subnet2Prefix = '10.2.2.0/23'
 param existing_ACR_Name = '#{APP_NAME_NO_DASHES}#cr#{envCode}#'
 param existing_ACR_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 
-param existing_SearchService_Name = '#{APP_NAME_NO_DASHES}#-srch-#{envCode}#'
 param existing_CogServices_Name = '#{APP_NAME_NO_DASHES}#-cog-#{envCode}#'
-param existing_CogServices_RG_Name = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
+param existing_CogServices_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 
-param existing_CosmosAccount_Name = '#{APP_NAME_NO_DASHES}#-cosmos-#{envCode}#'
+param existing_SearchService_Name = '#{APP_NAME_NO_DASHES}#-srch-#{envCode}#'
+param existing_SearchService_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
+
+param existing_Cosmos_Name = '#{APP_NAME_NO_DASHES}#-cosmos-#{envCode}#'
 param existing_Cosmos_ResourceGroupName = '#{RESOURCEGROUP_PREFIX}#-#{envCode}#'
 
 param existing_KeyVault_Name = '#{APP_NAME_NO_DASHES}#kv#{envCode}#'

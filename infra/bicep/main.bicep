@@ -93,9 +93,12 @@ param containerAppEnvironmentWorkloadProfiles array = [
 @description('Name of an existing Cognitive Services account to use')
 param existing_CogServices_Name string = ''
 @description('Resource Group where existing Cognitive Services account Lives')
-param existing_CogServices_RG_Name string = ''
+param existing_CogServices_ResourceGroupName string = ''
+
 @description('Name of an existing Search Services account to use')
 param existing_SearchService_Name string = ''
+@description('Resource Group where existing Search Services account Lives')
+param existing_SearchService_ResourceGroupName string = ''
 
 @description('Friendly name for your Azure AI resource')
 param aiProjectFriendlyName string = 'Agents Project resource'
@@ -106,7 +109,7 @@ param aiProjectDescription string = 'This is an example AI Project resource for 
 // Existing Cosmos resources?
 // --------------------------------------------------------------------------------------------------------------
 @description('Name of an existing Cosmos account to use')
-param existing_CosmosAccount_Name string = ''
+param existing_Cosmos_Name string = ''
 @description('Resource Group where existing Cosmos account Lives')
 param existing_Cosmos_ResourceGroupName string = ''
 
@@ -399,7 +402,7 @@ module cosmos './core/database/cosmosdb.bicep' = {
   name: 'cosmos${deploymentSuffix}'
   params: {
     accountName: resourceNames.outputs.cosmosName
-    existingAccountName: existing_CosmosAccount_Name
+    existingAccountName: existing_Cosmos_Name
     existingCosmosResourceGroupName: existing_Cosmos_ResourceGroupName
     databaseName: uiDatabaseName
     containerArray: cosmosContainerArray
@@ -423,6 +426,7 @@ module searchService './core/search/search-services.bicep' = {
     location: location
     name: resourceNames.outputs.searchServiceName
     existingSearchServiceName: existing_SearchService_Name
+    existingSearchServiceResourceGroupName: existing_SearchService_ResourceGroupName
     publicNetworkAccess: publicAccessEnabled ? 'enabled' : 'disabled'
     myIpAddress: myIpAddress
     privateEndpointSubnetId: vnet.outputs.subnet1ResourceId
@@ -442,7 +446,7 @@ module openAI './core/ai/cognitive-services.bicep' = {
   params: {
     managedIdentityId: identity.outputs.managedIdentityId
     existing_CogServices_Name: existing_CogServices_Name
-    existing_CogServices_RG_Name: existing_CogServices_RG_Name
+    existing_CogServices_ResourceGroupName: existing_CogServices_ResourceGroupName
     name: resourceNames.outputs.cogServiceName
     location: openAI_deploy_location // this may be different than the other resources
     pe_location: location
@@ -479,7 +483,7 @@ module documentIntelligence './core/ai/document-intelligence.bicep' = {
   name: 'doc-intelligence${deploymentSuffix}'
   params: {
     existing_CogServices_Name: '' //existing_DocumentIntelligence_Name
-    existing_CogServices_RG_Name: '' //existing_DocumentIntelligence_RG_Name
+    existing_CogServices_ResourceGroupName: '' //existing_DocumentIntelligence_RG_Name
     name: resourceNames.outputs.documentIntelligenceServiceName
     location: location // this may be different than the other resources
     tags: tags

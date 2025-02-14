@@ -1,5 +1,5 @@
 param existing_CogServices_Name string
-param existing_CogServices_RG_Name string
+param existing_CogServices_ResourceGroupName string
 param name string = ''
 param location string = resourceGroup().location
 param pe_location string = location
@@ -25,7 +25,7 @@ var cognitiveServicesKeySecretName = 'form-recognizer-services-key'
 
 // --------------------------------------------------------------------------------------------------------------
 resource existingAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = if (useExistingService) {
-    scope: resourceGroup(existing_CogServices_RG_Name)
+    scope: resourceGroup(existing_CogServices_ResourceGroupName)
     name: existing_CogServices_Name
   }
 
@@ -73,6 +73,6 @@ module privateEndpoint '../networking/private-endpoint.bicep' = if (!useExisting
 output id string = useExistingService  ? existingAccount.id : account.id
 output name string = useExistingService  ? existingAccount.name : account.name
 output endpoint string = useExistingService ? existingAccount.properties.endpoint : account.properties.endpoint
-output resourceGroupName string = useExistingService  ? existing_CogServices_RG_Name : resourceGroupName
+output resourceGroupName string = useExistingService  ? existing_CogServices_ResourceGroupName : resourceGroupName
 output keyVaultSecretName string = cognitiveServicesKeySecretName
 output privateEndpointName string = privateEndpointName
