@@ -8,9 +8,13 @@
 // ----------------------------------------------------------------------------------------------------
 
 param registryName string = ''
+// param registryResourceGroupName string = resourceGroup().name
 param storageAccountName string = ''
+// param storageResourceGroupName string = resourceGroup().name
 param aiSearchName string = ''
+// param aiSearchResourceGroupName string = resourceGroup().name
 param aiServicesName string = ''
+// param aiServicesResourceGroupName string = resourceGroup().name
 param identityPrincipalId string
 @allowed(['ServicePrincipal', 'User'])
 param principalType string = 'ServicePrincipal'
@@ -23,15 +27,19 @@ var addCogServicesRoles = !empty(aiServicesName)
 
 resource registry 'Microsoft.ContainerRegistry/registries@2023-11-01-preview' existing = if (addRegistryRoles) {
   name: registryName
+  // scope: resourceGroup(registryResourceGroupName)
 }
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing = if (addStorageRoles) {
   name: storageAccountName
+  // scope: resourceGroup(storageResourceGroupName)
 }
 resource aiService 'Microsoft.CognitiveServices/accounts@2024-06-01-preview' existing = {
   name: aiServicesName
+  // scope: resourceGroup(aiServicesResourceGroupName)
 }
 resource searchService 'Microsoft.Search/searchServices@2024-06-01-preview' existing = {
   name: aiSearchName
+  // scope: resourceGroup(aiSearchResourceGroupName)
 }
 
 resource registry_Role_AcrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (addRegistryRoles) {

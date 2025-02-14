@@ -64,8 +64,8 @@ var deployments = [
 
 // --------------------------------------------------------------------------------------------------------------
 resource existingAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = if (useExistingService) {
-  scope: resourceGroup(existing_CogServices_ResourceGroupName)
   name: existing_CogServices_Name
+  scope: resourceGroup(existing_CogServices_ResourceGroupName)
 }
 
 // --------------------------------------------------------------------------------------------------------------

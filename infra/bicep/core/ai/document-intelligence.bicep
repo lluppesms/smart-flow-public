@@ -25,9 +25,9 @@ var cognitiveServicesKeySecretName = 'form-recognizer-services-key'
 
 // --------------------------------------------------------------------------------------------------------------
 resource existingAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = if (useExistingService) {
-    scope: resourceGroup(existing_CogServices_ResourceGroupName)
-    name: existing_CogServices_Name
-  }
+  name: existing_CogServices_Name
+  scope: resourceGroup(existing_CogServices_ResourceGroupName)
+}
 
 // todo: switch to 'br/public:avm/res/cognitive-services/account:0.7.2'
 resource account 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (!useExistingService) {
