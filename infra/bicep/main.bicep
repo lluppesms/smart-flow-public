@@ -261,6 +261,11 @@ module appIdentityRoleAssignments './core/iam/role-assignments.bicep' = if (addR
   name: 'identity-access${deploymentSuffix}'
   params: {
     identityPrincipalId: identity.outputs.managedIdentityPrincipalId
+    principalType: 'ServicePrincipal'
+    registryName: containerRegistry.outputs.name
+    storageAccountName: storage.outputs.name
+    aiSearchName: searchService.outputs.name
+    aiServicesName: openAI.outputs.name
   }
 }
 
@@ -269,6 +274,10 @@ module adminUserRoleAssignments './core/iam/role-assignments.bicep' = if (addRol
   params: {
     identityPrincipalId: principalId
     principalType: 'User'
+    registryName: containerRegistry.outputs.name
+    storageAccountName: storage.outputs.name
+    aiSearchName: searchService.outputs.name
+    aiServicesName: openAI.outputs.name
   }
 }
 
