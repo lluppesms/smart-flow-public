@@ -105,7 +105,7 @@ var kvIpRules = keyVaultOwnerIpAddress == '' ? [] : [
 // --------------------------------------------------------------------------------
 resource existingKeyVaultResource 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = if (useExistingVault) {
   name: existingKeyVaultName
-  scope: resourceGroup(existing_KeyVault_ResourceGroupName)
+  scope: resourceGroup(existingKeyVaultResourceGroupName)
 }
 resource keyVaultResource 'Microsoft.KeyVault/vaults@2021-11-01-preview' = if (!useExistingVault) {
   name: keyVaultName
