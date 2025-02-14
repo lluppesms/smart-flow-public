@@ -19,6 +19,13 @@ resource existingVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' e
     name: subnet2Name
   }
 }
+module appSubnetNSG './network-security-group.bicep' = {
+  name: 'nsg'
+  params: {
+    nsgName: '${newVirtualNetworkName}-${subnet2Name}-nsg-${location}'
+    location: location
+  }
+}
 
 resource newVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' = if (!useExistingResource) {
   name: newVirtualNetworkName
@@ -41,6 +48,9 @@ resource newVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' = if (
         name: subnet2Name
         properties: {
           addressPrefix: subnet2Prefix
+          networkSecurityGroup: {
+            id: appSubnetNSG.outputs.id
+          }
           delegations: [ 
             {
               name: 'environments'
