@@ -1,6 +1,7 @@
 [
   {
-    "Name": "prompt-embedded-file",
+    "Name": "auto-body-damage-analysis",
+    "Id": "AutoBodyDamageAdvisor",
     "Description": "For a given image, this agent provides a report describing the damage",
     "Format": "markdown",
     "Agents": [
@@ -13,12 +14,12 @@
     ]
   },
   {
-    "Name": "prompt-supplied-by-user",
+    "Name": "user-defined-image-review",
     "Description": "For a given image, this agent provides a report describing if the image meets guidelines supplied by user",
     "Format": "markdown",
     "Agents": [
       {
-        "Name": "ColorReview",
+        "Name": "ImageAnalysis",
         "Type": "DynamicModelTask",
         "SystemMessage": "request::SystemPrompt",
         "UserMessage": "request::UserPrompt"
@@ -26,7 +27,7 @@
     ]
   },
   {
-    "Name": "prompt-in-profile-json",
+    "Name": "profile-specified-image-review",
     "Description": "For a given image, this agent provides a report describing if the image meets color-blindness guidelines",
     "Format": "markdown",
     "Agents": [
