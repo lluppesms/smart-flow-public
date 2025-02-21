@@ -1,8 +1,19 @@
+//----------------------------------------------------------------------------------------------------
+// See Services/Profile/profiles.json for the API definitions
+//----------------------------------------------------------------------------------------------------
+// The prompts for this API are defined inline in the profile.json file 
+// This API analyzes the attached image for a color blindness compliant color palette
+//----------------------------------------------------------------------------------------------------
+// If you want to call the cloud API, change the URL and use an API key to authenticate. 
+// Look up the api key from the Key Vault and put this X-Api-Key line after the 'Content-Type:' line
+//----------------------------------------------------------------------------------------------------
+
 @baseUrl = https://localhost:7179
+// @baseUrl = https://YOUR-URL.azurecontainerapps.io
+// @apiKey = 
+// X-Api-Key: {{apiKey}}
 
-/// Prompts are defined inline in the profile.json file and analyzes the attached image
-
-POST {{baseUrl}}/api/task/profile-specified-image-review
+POST {{baseUrl}}/api/task/image-review-inline-prompt
 Content-Type: application/json
 
 {
