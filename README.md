@@ -1,6 +1,6 @@
 # Smart Flow API
 
-This project is a demonstration of how to create an API with Semantic Kernel to create generic agentic workflows that Azure OpenAI and other tools to analyze and validate information, providing automated feedback reports for actionable insights and remediation.
+This project is a demonstration of how to create a landing zone for AI powered agents utilizing Semantic Kernel to create generic agentic workflows that call Azure OpenAI and other tools to analyze and validate information, providing automated feedback reports for actionable insights and remediation.
 
 ## Contents
 
