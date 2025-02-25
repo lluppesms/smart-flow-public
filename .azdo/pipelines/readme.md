@@ -8,7 +8,7 @@ Base Pipeline Definitions:
 - **[2a-deploy-infra-pipeline.yml](2a-deploy-infra-pipeline.yml):** Creates all of the Azure resources by deploying the [main.bicep](../../infra/bicep/main.bicep) template.
 - **[2b-build-deploy-all-pipeline.yml](2b-build-deploy-all-pipeline.yml):** Pipeline to build all apps in the app code folder, store the resulting images in the Azure Container Registry, then deploy to the Azure Container Apps environments.
   > Note: This pipeline pushes into the ACR created by the first pipeline. The service principal used to run this pipeline must have `acrpush` rights to the ACR, which will need to be added manually after the ACR is created in the Access Control page of the Container Registry.
-- **[2c-build-deploy-one-pipeline.yml](2b-build-deploy-one-pipeline.yml):** Pipeline to build the one set code in the app code folder, store the resulting image in the Azure Container Registry, then deploying it to the Azure Container Apps environment.
+- **[2c-build-deploy-one-pipeline.yml](2c-build-deploy-one-pipeline.yml):** Pipeline to build the one set code in the app code folder, store the resulting image in the Azure Container Registry, then deploying it to the Azure Container Apps environment.
   > Note: This pipeline pushes into the ACR created by the first pipeline. The service principal used to run this pipeline must have `acrpush` rights to the ACR, which will need to be added manually after the ACR is created in the Access Control page of the Container Registry.
 - **[3-build-pr-pipeline.yml](3-build-pr-pipeline.yml):** Runs each time a Pull Request is submitted and includes results in the PR
 - **[4-scan-pipeline.yml](4-scan-pipeline.yml):** Runs a periodic scan of the app for security vulnerabilities
@@ -58,7 +58,7 @@ The Resource Group created will be `<resourceGroupPrefix>-<env>` and will be cre
 
 If you want to use an existing Resource Group Name or change the format of the `generatedResourceGroupName` variable in the [create-infra-template.yml](./pipes/templates/create-infra-template.yml) file and also in the three aca-*template.yml files in the templates folder.
 
-Change the following line to whatever you need it to be:
+Change the following line in those files to whatever you need it to be:
 
 ```bash
 $resourceGroupName="$(resourceGroupPrefix)-$environmentNameLower".ToLower()
