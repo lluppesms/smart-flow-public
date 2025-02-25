@@ -13,7 +13,7 @@ This project is a demonstration of how to create a landing zone for AI powered a
 
 The solution is deployed using Azure Container Apps to run the API application, and there are other companion repositories that can provide UIs in the form of a website, a Teams app, and a phone client that will interact with this API.
 
-![Pluggable Architecture](./docs/pluggable-picture.png)
+![Pluggable Architecture](./docs/images/agentic-architecture.png)
 
 While developing this API, a Swagger interface and some simple REST Client API tests are provided to enable you to develop a working API that will use OpenAI tools to analyze documents and provide feedback. The prompts and processes are easily configurable and can be modified to suit your needs.
 
