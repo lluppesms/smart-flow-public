@@ -51,7 +51,7 @@ Typically a developer with either do the up command to do everything at once, or
 
 There is a Azure Developer CLI [extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.azure-dev) available in Visual Studio Code. If that is installed, it is easy to pop up the command window like this:
 
-![VSC Commands](../Docs/images/AZD_Commands.png)
+![VSC Commands](./images/AZD_Commands.png)
 
 ---
 
@@ -65,11 +65,11 @@ These commands can also be run on the command line, like this:
 
 ## Example Command Execution
 
-![VSC Commands](../Docs/images/azd_up-01.png)
+![VSC Commands](./images/azd_up-01.png)
 
 ### Resources Created
 
-![VSC Commands](../Docs/images/AZD_Result.png)
+![VSC Commands](./images/AZD_Result.png)
 
 ---
 
