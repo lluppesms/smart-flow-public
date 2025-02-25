@@ -54,7 +54,7 @@ To create this variable groups, customize and run this command in the Azure Clou
 
 ## Resource Group Name
 
-The Resource Group created will be `<resourceGroupPrefix>-<env>` and will be created in the `<location>` Azure region.  The `location` variable is defined in the [vars\var-common.yml](./vars\var-common.yml) file.  The `resourceGroupPrefix` variable could be defined in either the variable group or in the var-common.yml file.  
+The Resource Group created will be `<resourceGroupPrefix>-<env>` and will be created in the `<location>` Azure region.  The `location` variable is defined in the [vars/var-common.yml](./vars/var-common.yml) file.  The `resourceGroupPrefix` variable could be defined in either the variable group or in the [var-common.yml](./vars/var-common.yml)  file.  
 
 If you want to use an existing Resource Group Name or change the format of the `generatedResourceGroupName` variable in the [create-infra-template.yml](./pipes/templates/create-infra-template.yml) file and also in the three aca-*template.yml files in the templates folder.
 
@@ -66,11 +66,11 @@ $resourceGroupName="$(resourceGroupPrefix)-$environmentNameLower".ToLower()
 
 ## Create Service Connections and update the Service Connection Variable File
 
-The pipelines use unique Service Connection names for each environment (dev/qa/prod), and can be configured to be any name of your choosing. By default, they are set up to be a simple format of `<env> Service Connection`. Edit the [vars\var-service-connections.yml](./vars/var-service-connections.yml) file to match what you have set up as your service connections.
+The pipelines use unique Service Connection names for each environment (dev/qa/prod), and can be configured to be any name of your choosing. By default, they are set up to be a simple format of `<env> Service Connection`. Edit the [vars/var-service-connections.yml](./vars/var-service-connections.yml) file to match what you have set up as your service connections.
 
 See [Azure DevOps Service Connections](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure) for more info on how to set up service connections.
 
-```bash
+```yml
 - name: serviceConnectionName
   value: 'DEV Service Connection'
 - name: serviceConnectionDEV
@@ -83,7 +83,7 @@ See [Azure DevOps Service Connections](https://learn.microsoft.com/en-us/azure/d
 
 ## Update the Common Variables File with your settings
 
-Customize your deploy by editing the [vars\var-common.yml](./vars\var-common.yml) file. This file contains the following variables which you can change:
+Customize your deploy by editing the [vars/var-common.yml](./vars/var-common.yml) file. This file contains the following variables which you can change:
 
 ```bash
 - name: location
