@@ -63,8 +63,8 @@ on:
         required: false
         default: false
         type: boolean
-      runBuildDeployUI:
-        description: 'Build and Deploy Sample UI'
+      runDeployUI:
+        description: 'Deploy Sample UI'
         required: false
         default: true
         type: boolean
@@ -182,7 +182,7 @@ jobs:
       createDnsZones: ${{ inputs.createDnsZones }}
       deployAIHub: ${{ inputs.deployAIHub }}
       deployBatchApp: ${{ inputs.runBuildDeployBatch }}
-      deployUIApp: ${{ inputs.runBuildDeployUI }}
+      deployUIApp: ${{ inputs.runDeployUI }}
       addRoleAssignments: ${{ inputs.addRoleAssignments }}
 
   # ------------------------------------------------------------------------------------------------------------------------
