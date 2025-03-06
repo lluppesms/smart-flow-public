@@ -106,6 +106,9 @@ jobs:
       APP_NAME_NO_DASHES: ${{ steps.set-env.outputs.SANITIZED_APP_NAME }}
       RESOURCE_GROUP_NAME: '${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}'
 
+      APP2_NAME: ${{ vars.APP2_NAME }}
+      APP2_NAME_NO_DASHES: ${{ steps.set-env.outputs.SANITIZED_APP2_NAME }}
+
       ACR_NAME: '${{ vars.APP_NAME_NO_DASHES }}cr${{ inputs.deployEnvironment }}'
       ACR_REPO_NAME: ${{ env.ACR_REPO_NAME }}
       CONTAINER_APP_ENV_NAME: '${{ vars.APP_NAME_NO_DASHES }}-cae-${{ inputs.deployEnvironment }}'
@@ -128,13 +131,14 @@ jobs:
           echo "inputs.ENV_CODE: ${{ inputs.deployEnvironment }}"
           echo "vars.APP_NAME: ${{ vars.APP_NAME }}"
 
-          echo "Step 1"
+          APP2_NAME="rg_test-dev"
+          echo "APP2_NAME=$APP2_NAME" >> $GITHUB_OUTPUT
+          SANITIZED_APP2_NAME="$(echo $APP2_NAME | tr -d '-' | tr -d '_')"
+          echo "SANITIZED_APP2_NAME=$SANITIZED_APP2_NAME" >> $GITHUB_OUTPUT
+
           SANITIZED_APP_NAME="$(echo ${{ vars.APP_NAME }} | tr -d '-' | tr -d '_')"
-          echo "Step 2"
           echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME"
-          echo "Step 3"
           echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME" >> $GITHUB_OUTPUT
-          echo "Complete!"
 
   deploy:
     name: Test 2
@@ -145,9 +149,12 @@ jobs:
     steps:
       - name: Display Variables
         run: |-
-          echo "inputs.envCode=${{ inputs.envCode }}"
+          echo "inputs.envCode=${{ inputs.deployEnvironment }}"
           echo "APP_NAME: ${{ needs.template-env.outputs.APP_NAME }}"
           echo "APP_NAME_NO_DASHES: ${{ needs.template-env.outputs.APP_NAME_NO_DASHES }}"
+
+          echo "APP2_NAME: ${{ needs.template-env.outputs.APP2_NAME }}"
+          echo "APP2_NAME_NO_DASHES: ${{ needs.template-env.outputs.APP2_NAME_NO_DASHES }}"
 
           echo "Environment:"
           echo '${{ toJSON(env) }}'
