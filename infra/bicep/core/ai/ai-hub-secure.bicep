@@ -59,7 +59,7 @@ param myIpAddress string = ''
 
 var useProvidedHubIdentity = !empty(hubIdentityResourceId)
 
-resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
+resource aiHub 'Microsoft.MachineLearningServices/workspaces@2025-01-01-preview' = {
   name: aiHubName
   location: location
   tags: tags
@@ -81,7 +81,7 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
     //systemDatastoresAuthMode: 'identity'
     primaryUserAssignedIdentity: hubIdentityResourceId
     
-    // WARNING: these do not seem be allowed, but it's not stopping the deployment...
+    // WARNING: these do not seem be allowed in @2024-10-01, but it's not stopping the deployment...
     ipAllowlist: empty(myIpAddress) ? [] : [myIpAddress]
     systemDatastoresAuthMode: 'identity'
     
