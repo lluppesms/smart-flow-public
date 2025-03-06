@@ -2,9 +2,9 @@ param nsgName string
 param location string
 param tags object = {}
 param myIpAddress string = ''
-param existingVnetName string = ''
+param existingNSGName string = ''
 
-var useExistingResource = !empty(existingVnetName)
+var useExistingResource = !empty(existingNSGName)
 
 var myPersonalRule = myIpAddress == '' ? [] : [
   {

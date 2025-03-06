@@ -58,6 +58,8 @@ param subnet1Prefix string = '10.2.0.0/23'
 param subnet2Name string = ''
 @description('If new VNET, this is the Subnet addresses for the application, i.e. 10.2.2.0/23') // Provided subnet must have a size of at least /23
 param subnet2Prefix string = '10.2.2.0/23'
+@description('If you provide this is will be used instead of creating a new NSG')
+param existingNSGName string = ''
 
 // --------------------------------------------------------------------------------------------------------------
 // Existing container registry?
@@ -214,8 +216,8 @@ module resourceNames 'resourcenames.bicep' = {
 module appSubnetNSG './core/networking/network-security-group.bicep' = {
   name: 'nsg'
   params: {
-    existingVnetName: existingVnetName
-    nsgName: '${resourceNames.outputs.vnet_Name}-${subnet2Name}-nsg-${location}'
+    existingNSGName: existingNSGName
+    nsgName: resourceNames.outputs.nsgName
     location: location
     myIpAddress: myIpAddress
   }

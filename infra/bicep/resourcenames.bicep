@@ -47,9 +47,12 @@ output caManagedIdentityName string       = toLower('${sanitizedAppName}-${resou
 output kvManagedIdentityName string       = toLower('${sanitizedAppName}-${resourceAbbreviations.keyVaultVaults}-${resourceAbbreviations.managedIdentityUserAssignedIdentities}-${sanitizedEnvironment}${resourceToken}')
 output userAssignedIdentityName string    = toLower('${sanitizedAppName}-app-${resourceAbbreviations.managedIdentityUserAssignedIdentities}')
 
-output vnet_Name string                   = toLower('${sanitizedAppName}-${resourceAbbreviations.networkVirtualNetworks}-${sanitizedEnvironment}${resourceTokenWithDash}')
-output vnetAppSubnetName string           = toLower('snet-app')
+var vnetName                              = toLower('${sanitizedAppName}-${resourceAbbreviations.networkVirtualNetworks}-${sanitizedEnvironment}${resourceTokenWithDash}')
+var subnetName                            = toLower('snet-app')
+output vnet_Name string                   = vnetName
+output vnetAppSubnetName string           = subnetName
 output vnetPeSubnetName string            = toLower('snet-prv-endpoint')
+output nsgName string                     = toLower('${vnetName}-${subnetName}-${resourceAbbreviations.networkNetworkSecurityGroups}-${sanitizedEnvironment}')
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Container Registry, Key Vaults and Storage Account names are only alpha numeric characters limited length
