@@ -59,7 +59,7 @@ param myIpAddress string = ''
 
 var useProvidedHubIdentity = !empty(hubIdentityResourceId)
 
-resource aiHub 'Microsoft.MachineLearningServices/workspaces@2025-01-01-preview' = {
+resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
   name: aiHubName
   location: location
   tags: tags
