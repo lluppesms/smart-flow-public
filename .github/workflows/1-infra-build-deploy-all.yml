@@ -69,7 +69,7 @@ on:
         default: false
         type: boolean
 
-      # GH Actions restrict you to only 10 inputs... so will have to refactor this!
+      # GH Actions restrict you to only 10 inputs... so will have to refactor this to use it!
       # runBuildDeployBatch:
       #   description: Build and Deploy Batch?
       #   required: true

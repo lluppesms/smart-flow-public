@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       deployEnvironment:
-        description: 'Environment'
+        description: Environment
         required: true
         default: 'dev'
         type: choice
@@ -31,22 +31,22 @@ on:
           - nick
           - matt
       runBuildDeployAPI:
-        description: 'Build and Deploy API'
+        description: Build and Deploy API?
         required: true
         default: true
         type: boolean
       runBuildDeployBatch:
-        description: 'Build and Deploy Batch'
+        description: Build and Deploy Batch?
         required: true
         default: false
         type: boolean
       runDeployUI:
-        description: 'Deploy Sample UI'
+        description: Deploy Sample UI?
         required: true
         default: true
         type: boolean
       runSecurityScan:
-        description: 'Run Security Scan'
+        description: Run Security Scan?
         required: false
         default: false
         type: boolean
