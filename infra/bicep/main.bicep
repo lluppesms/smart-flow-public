@@ -341,7 +341,6 @@ module appIdentityRoleAssignments './core/iam/role-assignments.bicep' = if (addR
     storageAccountName: storage.outputs.name
     keyvaultName: keyVault.outputs.name
     aiServicesName: openAI.outputs.name
-    documentIntelligenceName: documentIntelligence.outputs.name
     aiSearchName: searchService.outputs.name
     cosmosName: cosmos.outputs.name
   }
@@ -356,7 +355,6 @@ module adminUserRoleAssignments './core/iam/role-assignments.bicep' = if (addRol
     storageAccountName: storage.outputs.name
     keyvaultName: keyVault.outputs.name
     aiServicesName: openAI.outputs.name
-    documentIntelligenceName: documentIntelligence.outputs.name
     aiSearchName: searchService.outputs.name
     cosmosName: cosmos.outputs.name
   }
