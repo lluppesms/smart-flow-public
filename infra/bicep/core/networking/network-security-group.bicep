@@ -113,3 +113,4 @@ output name string = useExistingResource ? '' : networkSecurityGroup.name
 output useExistingResource bool = useExistingResource
 output addPersonalRule bool = addPersonalRule
 output personalRules array = personalRules
+output isEmptyExistingName bool = !empty(existingNSGName)

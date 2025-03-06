@@ -9,6 +9,8 @@ param environmentName string = 'dev'
 @description('Optional resource token to ensure uniqueness - leave blank if desired')
 param resourceToken string = ''
 
+param location string = resourceGroup().location
+
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 var sanitizedEnvironment = toLower(environmentName)
 var sanitizedAppNameWithDashes = replace(replace(toLower(applicationName), ' ', ''), '_', '')
@@ -53,7 +55,7 @@ output vnet_Name string                   = vnetName
 output vnetAppSubnetName string           = subnetName
 output vnetPeSubnetName string            = toLower('snet-prv-endpoint')
 output vnetAgentSubnetName string         = toLower('snet-agents')
-output nsgName string                     = toLower('${vnetName}-${subnetName}-${resourceAbbreviations.networkNetworkSecurityGroups}-${sanitizedEnvironment}')
+output nsgName string                     = toLower('${vnetName}-${subnetName}-${resourceAbbreviations.networkNetworkSecurityGroups}-${location}')
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Container Registry, Key Vaults and Storage Account names are only alpha numeric characters limited length
