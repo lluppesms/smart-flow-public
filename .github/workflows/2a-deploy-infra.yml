@@ -38,7 +38,7 @@ on:
       runBuildDeploy:
         description: 'Build and Deploy'
         required: false
-        default: 'API-UI'
+        default: 'API+UI'
         type: choice
         options:
           - API
