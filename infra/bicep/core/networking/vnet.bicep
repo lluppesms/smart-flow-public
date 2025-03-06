@@ -45,7 +45,7 @@ module networkSecurityGroup './network-security-group.bicep' = if (!useExistingR
   params: {
     // existingNSGName: existingNSGName
     // nsgName: nsgName
-    nsgName: '${newVirtualNetworkName}-${subnet2Name}-nsg-${location}'
+    nsgName: '${newVirtualNetworkName}-nsg-${location}'
     location: location
     myIpAddress: myIpAddress
   }
