@@ -80,7 +80,7 @@ jobs:
       PROJECT_ROOT: ${{ github.workspace }}
       ENV_CODE: ${{ inputs.deployEnvironment }}
       APP_NAME: ${{ vars.APP_NAME }}
-      APP_NAME_NO_DASHES: ${{ vars.APP_NAME_NO_DASHES }}
+      APP_NAME_NO_DASHES: ${{ steps.set-env.outputs.APP_NAME_NO_DASHES }}
       RESOURCE_GROUP_NAME: '${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}'
 
       ACR_NAME: '${{ vars.APP_NAME_NO_DASHES }}cr${{ inputs.deployEnvironment }}'
@@ -104,7 +104,11 @@ jobs:
           echo "PROJECT_ROOT: ${{ github.workspace }}"
           echo "inputs.ENV_CODE: ${{ inputs.deployEnvironment }}"
           echo "vars.APP_NAME: ${{ vars.APP_NAME }}"
-          echo "vars.APP_NAME_NO_DASHES: ${{ vars.APP_NAME_NO_DASHES }}"
+
+          APP_NAME_NO_DASHES="$(echo ${{ vars.APP_NAME }} | tr -d '-' | tr -d '_')"
+          echo "APP_NAME_NO_DASHES=$APP_NAME_NO_DASHES"
+          echo "APP_NAME_NO_DASHES=$APP_NAME_NO_DASHES" >> $GITHUB_OUTPUT
+
           echo "AZURE_RESOURCE_GROUP: ${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}"
 
           echo "ACR_REPO_NAME: ${{ env.ACR_REPO_NAME }}"

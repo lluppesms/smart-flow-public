@@ -106,7 +106,7 @@ jobs:
       APP_NAME_NO_DASHES: ${{ steps.set-env.outputs.SANITIZED_APP_NAME }}
       RESOURCE_GROUP_NAME: '${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}'
 
-      APP2_NAME: ${{ vars.APP2_NAME }}
+      APP2_NAME: ${{ steps.set-env.outputs.APP2_NAME }}
       APP2_NAME_NO_DASHES: ${{ steps.set-env.outputs.SANITIZED_APP2_NAME }}
 
       ACR_NAME: '${{ vars.APP_NAME_NO_DASHES }}cr${{ inputs.deployEnvironment }}'
