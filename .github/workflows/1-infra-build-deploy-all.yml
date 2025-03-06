@@ -103,7 +103,7 @@ jobs:
       PROJECT_ROOT: ${{ github.workspace }}
       ENV_CODE: ${{ inputs.deployEnvironment }}
       APP_NAME: ${{ vars.APP_NAME }}
-      APP_NAME_NO_DASHES: ${{ vars.APP_NAME_NO_DASHES }}
+      APP_NAME_NO_DASHES: ${{ steps.set-env.outputs.SANITIZED_APP_NAME }}
       RESOURCE_GROUP_NAME: '${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}'
 
       ACR_NAME: '${{ vars.APP_NAME_NO_DASHES }}cr${{ inputs.deployEnvironment }}'
@@ -127,6 +127,11 @@ jobs:
           echo "PROJECT_ROOT: ${{ github.workspace }}"
           echo "inputs.ENV_CODE: ${{ inputs.deployEnvironment }}"
           echo "vars.APP_NAME: ${{ vars.APP_NAME }}"
+
+          SANITIZED_APP_NAME=$(echo "${{ vars.APP_NAME }}" | tr -d '-' | tr -d '_')
+          echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME"
+          echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME >> $GITHUB_OUTPUT
+
           echo "vars.APP_NAME_NO_DASHES: ${{ vars.APP_NAME_NO_DASHES }}"
           echo "AZURE_RESOURCE_GROUP: ${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}"
 
