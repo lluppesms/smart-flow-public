@@ -129,7 +129,7 @@ jobs:
           echo "vars.APP_NAME: ${{ vars.APP_NAME }}"
 
           echo "Step 1"
-          SANITIZED_APP_NAME="$(echo "${{ vars.APP_NAME }}" | tr -d '-' | tr -d '_')"
+          SANITIZED_APP_NAME="$(echo ${{ vars.APP_NAME }} | tr -d '-' | tr -d '_')"
           echo "Step 2"
           echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME"
           echo "Step 3"
