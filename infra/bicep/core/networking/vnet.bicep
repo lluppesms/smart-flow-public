@@ -19,7 +19,7 @@ param subnet3Prefix string
 // param networkSecurityGroupId string
 param existingNSGName string = ''
 param nsgName string
-// param myIpAddress string = ''
+param myIpAddress string = ''
 
 // --------------------------------------------------------------------------------------------------------------
 var useExistingResource = !empty(existingVirtualNetworkName)
@@ -45,7 +45,7 @@ module networkSecurityGroup './network-security-group.bicep' = if (!useExistingR
     existingNSGName: existingNSGName
     nsgName: nsgName
     location: location
-    // myIpAddress: myIpAddress
+    myIpAddress: myIpAddress
   }
 }
 
