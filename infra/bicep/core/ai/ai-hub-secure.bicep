@@ -80,8 +80,11 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
     containerRegistry: containerRegistryId
     //systemDatastoresAuthMode: 'identity'
     primaryUserAssignedIdentity: hubIdentityResourceId
+    
+    // WARNING: these do not seem be allowed, but it's not stopping the deployment...
     ipAllowlist: empty(myIpAddress) ? [] : [myIpAddress]
     systemDatastoresAuthMode: 'identity'
+    
     // THIS IS NOT WORKING
     //sharedPrivateLinkResources: [
     // {

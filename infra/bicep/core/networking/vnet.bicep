@@ -16,8 +16,6 @@ param subnet1Prefix string
 param subnet2Prefix string
 param subnet3Prefix string
 
-param existingNSGName string = ''
-param nsgName string
 param myIpAddress string = ''
 
 param deploymentSuffix string = ''
@@ -43,8 +41,6 @@ resource existingVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' e
 module networkSecurityGroup './network-security-group.bicep' = if (!useExistingResource) {
   name: 'nsg${deploymentSuffix}'
   params: {
-    // existingNSGName: existingNSGName
-    // nsgName: nsgName
     nsgName: '${newVirtualNetworkName}-nsg-${location}'
     location: location
     myIpAddress: myIpAddress
