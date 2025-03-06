@@ -133,7 +133,7 @@ jobs:
           echo "Step 2"
           echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME"
           echo "Step 3"
-          echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME >> $GITHUB_OUTPUT
+          echo "SANITIZED_APP_NAME=$SANITIZED_APP_NAME" >> $GITHUB_OUTPUT
           echo "Complete!"
 
   deploy:
