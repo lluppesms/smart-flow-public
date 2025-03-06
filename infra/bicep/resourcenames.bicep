@@ -52,6 +52,7 @@ var subnetName                            = toLower('snet-app')
 output vnet_Name string                   = vnetName
 output vnetAppSubnetName string           = subnetName
 output vnetPeSubnetName string            = toLower('snet-prv-endpoint')
+output vnetAgentSubnetName string         = toLower('snet-agents')
 output nsgName string                     = toLower('${vnetName}-${subnetName}-${resourceAbbreviations.networkNetworkSecurityGroups}-${sanitizedEnvironment}')
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------

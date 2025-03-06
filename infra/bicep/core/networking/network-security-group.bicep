@@ -1,9 +1,13 @@
+// --------------------------------------------------------------------------------------------------------------
+// Network Security Group
+// --------------------------------------------------------------------------------------------------------------
 param nsgName string
 param location string
 param tags object = {}
 param myIpAddress string = ''
 param existingNSGName string = ''
 
+// --------------------------------------------------------------------------------------------------------------
 var useExistingResource = !empty(existingNSGName)
 
 var myPersonalRule = myIpAddress == '' ? [] : [
@@ -22,6 +26,7 @@ var myPersonalRule = myIpAddress == '' ? [] : [
     }
 ]
 
+// --------------------------------------------------------------------------------------------------------------
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = if (useExistingResource) {
   name: nsgName
   location: location

@@ -52,12 +52,17 @@ param existingVnetResourceGroupName string = ''
 param vnetPrefix string = '10.2.0.0/16'
 @description('If new VNET, this is the Subnet name for the private endpoints')
 param subnet1Name string = ''
-@description('If new VNET, this is the Subnet addresses for the private endpoints, i.e. 10.2.0.0/26') //Provided subnet must have a size of at least /23
+@description('If new VNET, this is the Subnet addresses for the private endpoints, i.e. 10.2.0.0/23') //Provided subnet must have a size of at least /23
 param subnet1Prefix string = '10.2.0.0/23'
 @description('If new VNET, this is the Subnet name for the application')
 param subnet2Name string = ''
 @description('If new VNET, this is the Subnet addresses for the application, i.e. 10.2.2.0/23') // Provided subnet must have a size of at least /23
 param subnet2Prefix string = '10.2.2.0/23'
+@description('If new VNET, this is the Subnet name for the agents')
+param subnet3Name string = ''
+@description('If new VNET, this is the Subnet addresses for the agents, i.e. 10.2.4.0/24')
+param subnet3Prefix string = '10.2.4.0/24'
+
 @description('If you provide this is will be used instead of creating a new NSG')
 param existingNSGName string = ''
 
@@ -213,16 +218,6 @@ module resourceNames 'resourcenames.bicep' = {
 // --------------------------------------------------------------------------------------------------------------
 // -- VNET ------------------------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------------
-module appSubnetNSG './core/networking/network-security-group.bicep' = {
-  name: 'nsg'
-  params: {
-    existingNSGName: existingNSGName
-    nsgName: resourceNames.outputs.nsgName
-    location: location
-    myIpAddress: myIpAddress
-  }
-}
-
 module vnet './core/networking/vnet.bicep' = {
   name: 'vnet${deploymentSuffix}'
   params: {
@@ -230,21 +225,16 @@ module vnet './core/networking/vnet.bicep' = {
     existingVirtualNetworkName: existingVnetName
     existingVnetResourceGroupName: existingVnetResourceGroupName
     newVirtualNetworkName: resourceNames.outputs.vnet_Name
-    networkSecurityGroupId: appSubnetNSG.outputs.id
+    existingNSGName: existingNSGName
+    nsgName: resourceNames.outputs.nsgName
+    myIpAddress: myIpAddress
     vnetAddressPrefix: vnetPrefix
     subnet1Name: !empty(subnet1Name) ? subnet1Name : resourceNames.outputs.vnetPeSubnetName
     subnet1Prefix: subnet1Prefix
     subnet2Name: !empty(subnet2Name) ? subnet2Name : resourceNames.outputs.vnetAppSubnetName
     subnet2Prefix: subnet2Prefix
-    otherSubnets: [{
-      name: 'snet-agents'
-      properties: {
-        addressPrefix: '10.2.4.0/24'
-        delegations: [
-          { name: 'Microsoft.app/environments', properties: { serviceName: 'Microsoft.app/environments' } }
-        ]
-      }
-    }]
+    subnet3Name: !empty(subnet3Name) ? subnet3Name : resourceNames.outputs.vnetAgentSubnetName
+    subnet3Prefix: subnet3Prefix
     modelLocation: openAI_deploy_location
   }
 }
