@@ -236,6 +236,7 @@ module vnet './core/networking/vnet.bicep' = {
     subnet3Name: !empty(subnet3Name) ? subnet3Name : resourceNames.outputs.vnetAgentSubnetName
     subnet3Prefix: subnet3Prefix
     modelLocation: openAI_deploy_location
+    deploymentSuffix: deploymentSuffix
   }
 }
 

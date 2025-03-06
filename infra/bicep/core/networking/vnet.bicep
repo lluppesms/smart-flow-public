@@ -16,10 +16,11 @@ param subnet1Prefix string
 param subnet2Prefix string
 param subnet3Prefix string
 
-// param networkSecurityGroupId string
 param existingNSGName string = ''
 param nsgName string
 param myIpAddress string = ''
+
+param deploymentSuffix string = ''
 
 // --------------------------------------------------------------------------------------------------------------
 var useExistingResource = !empty(existingVirtualNetworkName)
@@ -40,7 +41,7 @@ resource existingVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' e
 }
 
 module networkSecurityGroup './network-security-group.bicep' = if (!useExistingResource) {
-  name: 'nsg'
+  name: 'nsg${deploymentSuffix}'
   params: {
     existingNSGName: existingNSGName
     nsgName: nsgName
