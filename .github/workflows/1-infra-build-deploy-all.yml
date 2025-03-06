@@ -33,16 +33,21 @@ on:
         description: 'Parameter File'
         required: true
         default: 'main.gh.bicepparam'
-      runBuildDeploy:
-        description: 'Build and Deploy'
-        required: false
-        default: 'API+UI'
-        type: choice
-        options:
-          - API
-          - API+BATCH
-          - API+UI
-          - API+BATCH+UI
+      runBuildDeployAPI:
+        description: 'Build and Deploy API'
+        required: true
+        default: true
+        type: boolean
+      runBuildDeployBatch:
+        description: 'Build and Deploy Batch'
+        required: true
+        default: false
+        type: boolean
+      runDeployUI:
+        description: 'Deploy Sample UI'
+        required: true
+        default: true
+        type: boolean
       createResourceGroup:
         description: Create Resource Group?
         type: boolean
@@ -68,11 +73,6 @@ on:
         required: false
         default: false
         type: boolean
-      # runSmokeTest:
-      #   description: 'Run Smoke Tests'
-      #   required: false
-      #   default: false
-      #   type: boolean
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -106,24 +106,20 @@ jobs:
       APP_NAME_NO_DASHES: ${{ steps.set-env.outputs.APP_NAME_NO_DASHES }}
       RESOURCE_GROUP_NAME: '${{ vars.RESOURCEGROUP_PREFIX }}-${{ inputs.deployEnvironment }}'
 
-      ACR_NAME: '${{ vars.APP_NAME_NO_DASHES }}cr${{ inputs.deployEnvironment }}'
+      ACR_NAME: '${{ steps.set-env.outputs.APP_NAME_NO_DASHES }}cr${{ inputs.deployEnvironment }}'
       ACR_REPO_NAME: ${{ env.ACR_REPO_NAME }}
-      CONTAINER_APP_ENV_NAME: '${{ vars.APP_NAME_NO_DASHES }}-cae-${{ inputs.deployEnvironment }}'
+      CONTAINER_APP_ENV_NAME: '${{ steps.set-env.outputs.APP_NAME_NO_DASHES }}-cae-${{ inputs.deployEnvironment }}'
 
-      API_CONTAINER_APP_NAME: '${{ vars.APP_NAME_NO_DASHES }}-ca-api-${{ inputs.deployEnvironment }}'
+      API_CONTAINER_APP_NAME: '${{ steps.set-env.outputs.APP_NAME_NO_DASHES }}-ca-api-${{ inputs.deployEnvironment }}'
       API_APP_PATH: ${{ env.API_APP_PATH }}
       API_ACR_APP_NAME: ${{ env.API_ACR_APP_NAME }}
       API_PORT: ${{ env.API_PORT }}
 
-      BATCH_CONTAINER_APP_NAME: '${{ vars.APP_NAME_NO_DASHES }}-ca-batch-${{ inputs.deployEnvironment }}'
+      BATCH_CONTAINER_APP_NAME: '${{ steps.set-env.outputs.APP_NAME_NO_DASHES }}-ca-batch-${{ inputs.deployEnvironment }}'
       BATCH_APP_PATH: ${{ env.BATCH_APP_PATH }}
       BATCH_ACR_APP_NAME: ${{ env.BATCH_ACR_APP_NAME }}
       BATCH_PORT: ${{ env.BATCH_PORT }}
       
-      DEPLOY_APPS_PARM: ${{ steps.set-env.outputs.deployAppParm }}
-      DEPLOY_BATCHAPP_PARM: ${{ steps.set-env.outputs.deployBatchAppParm }}
-      DEPLOY_UIAPP_PARM: ${{ steps.set-env.outputs.deployUIAppParm }}
-
     steps:
       - name: Set common environment variables
         id: set-env
@@ -131,16 +127,6 @@ jobs:
           echo "PROJECT_ROOT: ${{ github.workspace }}"
           echo "inputs.ENV_CODE: ${{ inputs.deployEnvironment }}"
           echo "vars.APP_NAME: ${{ vars.APP_NAME }}"
-
-          deployAppParm="${{ inputs.runBuildDeploy }}"
-          echo "deployAppParm=$deployAppParm"
-          echo "deployAppParm=$deployAppParm" >> $GITHUB_OUTPUT
-          deployBatchAppParm="${{ contains('BATCH', inputs.runBuildDeploy) }}"
-          echo "deployBatchAppParm=$deployBatchAppParm"
-          echo "deployBatchAppParm=$deployBatchAppParm" >> $GITHUB_OUTPUT
-          deployUIAppParm="${{ contains('UI', inputs.runBuildDeploy) }}"
-          echo "deployUIAppParm=$deployUIAppParm"
-          echo "deployUIAppParm=$deployUIAppParm" >> $GITHUB_OUTPUT
     
           APP_NAME_NO_DASHES="$(echo ${{ vars.APP_NAME }} | tr -d '-' | tr -d '_')"
           echo "APP_NAME_NO_DASHES=$APP_NAME_NO_DASHES"
@@ -192,9 +178,8 @@ jobs:
       publicAccessEnabled: ${{ inputs.publicAccessEnabled }}
       createDnsZones: ${{ inputs.createDnsZones }}
       deployAIHub: ${{ inputs.deployAIHub }}
-      deployBatchApp: ${{ needs.template-env.outputs.DEPLOY_BATCHAPP_PARM }}
-      deployUIApp: ${{ needs.template-env.outputs.DEPLOY_UIAPP_PARM }}
-      buildDeployParm: ${{ inputs.runBuildDeploy }}
+      deployBatchApp: ${{ inputs.runBuildDeployBatch }}
+      deployUIApp: ${{ inputs.runDeployUI }}
       addRoleAssignments: ${{ inputs.addRoleAssignments }}
 
   # ------------------------------------------------------------------------------------------------------------------------
@@ -211,11 +196,11 @@ jobs:
       RESOURCE_GROUP: ${{ needs.template-env.outputs.RESOURCE_GROUP_NAME }}
       ACR_REPO_NAME: ${{ needs.template-env.outputs.ACR_REPO_NAME }}
 
-      BUILD_DEPLOY_API: ${{ contains('API', inputs.runBuildDeploy) }}
+      BUILD_DEPLOY_API: ${{ inputs.runBuildDeployAPI }}
       API_APP_PATH: ${{ needs.template-env.outputs.API_APP_PATH }}
       API_ACR_APP_NAME: ${{ needs.template-env.outputs.API_ACR_APP_NAME }}
 
-      BUILD_DEPLOY_BATCH: ${{ contains('BATCH', inputs.runBuildDeploy) }}
+      BUILD_DEPLOY_BATCH: ${{ inputs.runBuildDeployBatch }}
       BATCH_APP_PATH: ${{ needs.template-env.outputs.BATCH_APP_PATH }}
       BATCH_ACR_APP_NAME: ${{ needs.template-env.outputs.BATCH_ACR_APP_NAME }}
 
@@ -223,7 +208,7 @@ jobs:
   deploy-api:
     name: Deploy API ${{ inputs.deployEnvironment }} ${{ inputs.deployType }}
     uses: ./.github/workflows/template-aca-deploy.yml
-    if: ${{ contains('API', inputs.runBuildDeploy) }}
+    if: ${{ inputs.runBuildDeployAPI }}
     needs:
       - build-all
       - template-env
@@ -241,7 +226,7 @@ jobs:
   deploy-batch:
     name: Deploy Batch ${{ inputs.deployEnvironment }} ${{ inputs.deployType }}
     uses: ./.github/workflows/template-aca-deploy.yml
-    if: ${{ contains('BATCH', inputs.runBuildDeploy) }}
+    if: ${{ inputs.runBuildDeployBatch }}
     needs:
       - build-all
       - template-env
@@ -274,22 +259,3 @@ jobs:
     with:
       envCode: ${{ inputs.deployEnvironment }}
       resourceGroupName: ${{ needs.template-env.outputs.RESOURCE_GROUP_NAME }}
-
-  # # ------------------------------------------------------------------------------------------------------------------------
-  # # Future use...!
-  # # ------------------------------------------------------------------------------------------------------------------------
-  # smoke-test:
-  #   name: Smoke Test
-  #   uses: ./.github/workflows/template-smoke-test.yml
-  #   if: inputs.runSmokeTest
-  #   needs: deploy-ui
-  #   secrets: inherit
-  #   permissions:
-  #     contents: write
-  #     issues: read
-  #     checks: write
-  #     pull-requests: read
-  #   with:
-  #     envCode: ${{ inputs.deployEnvironment }}
-  #     testPath: 'playwright/ui-tests'
-  #     testType: 'ui'

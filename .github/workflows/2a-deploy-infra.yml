@@ -35,16 +35,21 @@ on:
         description: 'Parameter File'
         required: true
         default: 'main.gh.bicepparam'
-      runBuildDeploy:
-        description: 'Build and Deploy'
-        required: false
-        default: 'API+UI'
-        type: choice
-        options:
-          - API
-          - API+BATCH
-          - API+UI
-          - API+BATCH+UI
+      runBuildDeployAPI:
+        description: 'Build and Deploy API'
+        required: true
+        default: true
+        type: boolean
+      runBuildDeployBatch:
+        description: 'Build and Deploy Batch'
+        required: true
+        default: false
+        type: boolean
+      runDeployUI:
+        description: 'Deploy Sample UI'
+        required: true
+        default: true
+        type: boolean
       createResourceGroup:
         description: Create Resource Group?
         type: boolean
@@ -87,6 +92,6 @@ jobs:
       publicAccessEnabled: ${{ inputs.publicAccessEnabled }}
       createDnsZones: ${{ inputs.createDnsZones }}
       deployAIHub: ${{ inputs.deployAIHub }}
-      deployBatchApp: ${{ contains('BATCH', inputs.runBuildDeploy) }}
-      deployUIApp: ${{ contains('UI', inputs.runBuildDeploy) }}
+      deployBatchApp: ${{ inputs.runBuildDeployBatch }}
+      deployUIApp: ${{ inputs.runDeployUI }}
       addRoleAssignments: ${{ inputs.addRoleAssignments }}
