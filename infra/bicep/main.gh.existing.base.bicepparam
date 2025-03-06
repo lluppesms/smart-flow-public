@@ -15,6 +15,7 @@ param myIpAddress = '#{ADMIN_IP_ADDRESS}#'
 param principalId = '#{ADMIN_PRINCIPAL_ID}#'
 param deployAIHub = #{deployAIHub}#
 param deployBatchApp = #{deployBatchApp}#
+param deployUIApp = #{deployUIApp}#
 
 // Can't seem to get this to work...  
 // param existingVnetName = 'llsfazbase-vnet-dev'
