@@ -5,10 +5,8 @@ param nsgName string
 param location string
 param tags object = {}
 param myIpAddress string = ''
-param existingNSGName string = ''
 
 // --------------------------------------------------------------------------------------------------------------
-var useExistingResource = !empty(existingNSGName)
 var addPersonalRule = !empty(myIpAddress)
 
 var personalRules = addPersonalRule ? [
@@ -28,7 +26,7 @@ var personalRules = addPersonalRule ? [
 ] : []
 
 // --------------------------------------------------------------------------------------------------------------
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {   // if (useExistingResource) {
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
   name: nsgName
   location: location
   tags: tags
@@ -108,9 +106,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-0
   }
 }
 
-output id string = useExistingResource ? '' : networkSecurityGroup.id
-output name string = useExistingResource ? '' : networkSecurityGroup.name
-output useExistingResource bool = useExistingResource
+output id string = networkSecurityGroup.id
+output name string = networkSecurityGroup.name
+output myIpAddress string = myIpAddress
 output addPersonalRule bool = addPersonalRule
-output personalRules array = personalRules
-output isEmptyExistingName bool = !empty(existingNSGName)
