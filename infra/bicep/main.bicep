@@ -539,12 +539,12 @@ module openAI './core/ai/cognitive-services.bicep' = {
      {
         name: 'gpt-35-turbo'
         model: { format: 'OpenAI', name: 'gpt-35-turbo', version: '0125' }
-        sku: { name: 'Standard', capacity: 100 }
+        sku: { name: 'Standard', capacity: 30 }
       }
       {
         name: 'gpt-4o'
         model: { format: 'OpenAI', name: 'gpt-4o', version: '2024-08-06' }
-        sku: { name: 'Standard', capacity: 100 }
+        sku: { name: 'Standard', capacity: 30 }
       } 
     ]
     publicNetworkAccess: publicAccessEnabled ? 'enabled' : 'disabled'
