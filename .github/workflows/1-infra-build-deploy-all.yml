@@ -33,6 +33,16 @@ on:
         description: 'Parameter File'
         required: true
         default: 'main.gh.bicepparam'
+      runBuildDeploy:
+        description: 'Build and Deploy'
+        required: false
+        default: 'API-UI'
+        type: choice
+        options:
+          - API
+          - API+BATCH
+          - API+UI
+          - API+BATCH+UI
       createResourceGroup:
         description: Create Resource Group?
         type: boolean
@@ -53,16 +63,6 @@ on:
         description: Deploy AI Hub?
         type: boolean
         default: true
-      runBuildDeploy:
-        description: 'Build and Deploy'
-        required: false
-        default: 'API-UI'
-        type: choice
-        options:
-          - API
-          - API-BATCH
-          - API-UI
-          - API-BATCH-UI
       runSecurityScan:
         description: 'Run Security Scan'
         required: false
