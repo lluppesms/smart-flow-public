@@ -61,6 +61,9 @@ on:
         description: Deploy UI App?
         type: boolean
         default: true
+      buildDeployParm:
+        required: false
+        type: string    
       addRoleAssignments:
         description: Add Role Assignments?
         type: boolean
@@ -91,6 +94,7 @@ jobs:
       deployAIHub: ${{ inputs.deployAIHub }}
       deployBatchApp: ${{ inputs.deployBatchApp }}
       deployUIApp: ${{ inputs.deployUIApp }}
+      buildDeployParm: ${{ inputs.buildDeployParm }}
       addRoleAssignments: ${{ inputs.addRoleAssignments }}
 
     # ------------------------------------------------------------------------------------------------------------------------
@@ -115,6 +119,7 @@ jobs:
       - name: Display Variables and Files
         run: |-
           echo "inputs.envCode=${{ inputs.envCode }}"
+          echo "buildDeployParm=${{ inputs.buildDeployParm }}"
           echo "env.generatedResourceGroupName=${{ env.generatedResourceGroupName }}"
           echo "vars.APP_NAME=${{ vars.APP_NAME }}"
           echo "vars.APP_PREFIX=${{ vars.APP_PREFIX }}"

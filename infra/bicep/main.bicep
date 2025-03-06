@@ -1,8 +1,4 @@
 
-
-// LLL 03-05: close, but I still need to address the TODO items, and also evaluate ai-hub-secure.bicep, then test it as I haven't run this yet...!
-
-
 // --------------------------------------------------------------------------------------------------------------
 // Main bicep file that deploys EVERYTHING for the application, with optional parameters for existing resources.
 // --------------------------------------------------------------------------------------------------------------
