@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       deployEnvironment:
-        description: 'Environment'
+        description: Environment
         required: true
         default: 'dev'
         type: choice
@@ -30,24 +30,9 @@ on:
           - nick
           - matt
       parameterFile:
-        description: 'Parameter File'
+        description: Parameter File
         required: true
         default: 'main.gh.bicepparam'
-      runBuildDeployAPI:
-        description: 'Build and Deploy API'
-        required: true
-        default: true
-        type: boolean
-      runBuildDeployBatch:
-        description: 'Build and Deploy Batch'
-        required: true
-        default: false
-        type: boolean
-      runDeployUI:
-        description: 'Deploy Sample UI'
-        required: true
-        default: true
-        type: boolean
       createResourceGroup:
         description: Create Resource Group?
         type: boolean
@@ -64,12 +49,27 @@ on:
         description: Add Role Assignments?
         type: boolean
         default: true
+      runBuildDeployAPI:
+        description: Build and Deploy API?
+        required: true
+        default: true
+        type: boolean
+      runDeployUI:
+        description: Deploy Sample UI?
+        required: true
+        default: true
+        type: boolean
       deployAIHub:
         description: Deploy AI Hub?
         type: boolean
         default: true
+      runBuildDeployBatch:
+        description: Build and Deploy Batch?
+        required: true
+        default: false
+        type: boolean
       runSecurityScan:
-        description: 'Run Security Scan'
+        description: Run Security Scan?
         required: false
         default: false
         type: boolean
