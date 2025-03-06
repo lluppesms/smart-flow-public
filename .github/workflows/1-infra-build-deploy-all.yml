@@ -192,8 +192,8 @@ jobs:
       publicAccessEnabled: ${{ inputs.publicAccessEnabled }}
       createDnsZones: ${{ inputs.createDnsZones }}
       deployAIHub: ${{ inputs.deployAIHub }}
-      deployBatchApp: '${{ needs.template-env.outputs.DEPLOY_BATCHAPP_PARM }}'
-      deployUIApp: '${{ needs.template-env.outputs.DEPLOY_UIAPP_PARM }}'
+      deployBatchApp: ${{ needs.template-env.outputs.DEPLOY_BATCHAPP_PARM }}
+      deployUIApp: ${{ needs.template-env.outputs.DEPLOY_UIAPP_PARM }}
       buildDeployParm: ${{ inputs.runBuildDeploy }}
       addRoleAssignments: ${{ inputs.addRoleAssignments }}
 

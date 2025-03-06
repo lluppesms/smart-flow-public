@@ -55,12 +55,12 @@ on:
         default: false
       deployBatchApp:
         description: Deploy Batch App?
-        type: boolean
-        default: true
+        type: string
+        default: 'true'
       deployUIApp:
         description: Deploy UI App?
-        type: boolean
-        default: true
+        type: string
+        default: 'true'
       buildDeployParm:
         required: false
         type: string    
