@@ -28,7 +28,7 @@ var personalRules = addPersonalRule ? [
 ] : []
 
 // --------------------------------------------------------------------------------------------------------------
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = if (useExistingResource) {
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {   // if (useExistingResource) {
   name: nsgName
   location: location
   tags: tags
