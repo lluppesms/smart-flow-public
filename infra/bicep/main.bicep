@@ -670,7 +670,6 @@ module managedEnvironment './core/host/managedEnvironment.bicep' = {
 var apiTargetPort = 8080
 var apiSettings = [
   { name: 'ApiKey', secretRef: 'apikey' }
-  { name: 'AnalysisApiKey', secretRef: 'apikey' }
   { name: 'AnalysisApiEndpoint', value: 'https://${resourceNames.outputs.containerAppAPIName}.${managedEnvironment.outputs.defaultDomain}' }
   { name: 'AOAIStandardServiceEndpoint', value: openAI.outputs.endpoint }
   { name: 'AOAIStandardChatGptDeployment', value: 'gpt-4o' }
