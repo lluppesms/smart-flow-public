@@ -147,8 +147,8 @@ param searchServiceSkuName string = 'basic'
 // --------------------------------------------------------------------------------------------------------------
 param apiImageName string = ''
 param batchImageName string = ''
-param uiContainerRegistry string = '' // 'ghcr.io'
-param uiImageName string = ''         // '/msft-mfg-ai/smart-flow-ui/smartflowui:latest'
+param uiContainerRegistry string = 'ghcr.io'
+param uiImageName string = '/msft-mfg-ai/smart-flow-ui/smartflowui:latest'
 
 // --------------------------------------------------------------------------------------------------------------
 // Other deployment switches
