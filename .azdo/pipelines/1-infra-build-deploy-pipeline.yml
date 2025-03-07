@@ -59,10 +59,13 @@ parameters:
     displayName: Which Apps to build and deploy?
     type: string
     values:
+      - API-UI
       - API
+      - UI
       - BATCH
       - API-BATCH
-    default: 'API'
+      - API-BATCH-UI
+    default: 'API-UI'
   - name: buildApps
     displayName: Build Docker Images
     type: boolean
@@ -110,6 +113,7 @@ stages:
       createDnsZones: ${{ parameters.createDnsZones }}
       deployAIHub: ${{ parameters.deployAIHub }}
       deployBatchApp: ${{ contains(parameters.apps, 'BATCH') }}
+      deployUIApp: ${{ contains(parameters.apps, 'UI') }}
       addRoleAssignments: ${{ parameters.addRoleAssignments }}
       runMSDevSecOpsScan: false
       runGHASScan: false
