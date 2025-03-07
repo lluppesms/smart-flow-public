@@ -147,8 +147,8 @@ param searchServiceSkuName string = 'basic'
 // --------------------------------------------------------------------------------------------------------------
 param apiImageName string = ''
 param batchImageName string = ''
-param uiContainerRegistry string = 'ghcr.io'
-param uiImageName string = '/msft-mfg-ai/smart-flow-ui/smartflowui:latest'
+param uiContainerRegistry string = '' // 'ghcr.io'
+param uiImageName string = '' // '/msft-mfg-ai/smart-flow-ui/smartflowui:latest'
 
 // --------------------------------------------------------------------------------------------------------------
 // Other deployment switches
@@ -784,7 +784,7 @@ module containerAppUI './core/host/containerappstub.bicep' = if (deployUIApp) {
     managedEnvironmentName: managedEnvironment.outputs.name
     managedEnvironmentRg: managedEnvironment.outputs.resourceGroupName
     workloadProfileName: appContainerAppEnvironmentWorkloadProfileName
-    registryName: uiContainerRegistry
+    registryName: uiContainerRegistry != '' ? uiContainerRegistry : resourceNames.outputs.ACR_FQDN
     imageName: uiImageName
     userAssignedIdentityName: identity.outputs.managedIdentityName
     deploymentSuffix: deploymentSuffix
