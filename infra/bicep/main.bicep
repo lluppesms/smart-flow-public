@@ -58,9 +58,6 @@ param subnet3Name string = ''
 @description('If new VNET, this is the Subnet addresses for the agents, i.e. 10.2.4.0/24')
 param subnet3Prefix string = '10.2.4.0/24'
 
-@description('If you provide this is will be used instead of creating a new NSG')
-param existingNSGName string = ''
-
 // --------------------------------------------------------------------------------------------------------------
 // Existing container registry?
 // --------------------------------------------------------------------------------------------------------------
