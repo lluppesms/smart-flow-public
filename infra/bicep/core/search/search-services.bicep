@@ -5,13 +5,18 @@ param tags object = {}
 param existingSearchServiceName string = ''
 param existingSearchServiceResourceGroupName string = resourceGroup().name
 
-param sku object = { name: 'standard' }
+param sku object = {
+  name: 'standard'
+  //name: 'basic'
+}
 
 @description('Ip Address to allow access to the Azure Search Service')
 param myIpAddress string = ''
 param partitionCount int = 1
-
-@allowed(['enabled', 'disabled'])
+@allowed([
+  'enabled'
+  'disabled'
+])
 param publicNetworkAccess string = 'disabled'
 param replicaCount int = 1
 
@@ -40,7 +45,6 @@ resource search 'Microsoft.Search/searchServices@2024-06-01-preview' = if (!useE
   name: name
   location: location
   tags: tags
-  sku: sku
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -50,16 +54,25 @@ resource search 'Microsoft.Search/searchServices@2024-06-01-preview' = if (!useE
   properties: {
     networkRuleSet: publicNetworkAccess == 'enabled' ? {} : {
       bypass: 'AzurePortal'
-      ipRules: empty(myIpAddress) ? [] : [ { value: myIpAddress } ]
+      ipRules: empty(myIpAddress)
+        ? []
+        : [
+            {
+              value: myIpAddress
+            }
+          ]
     }
     partitionCount: partitionCount
     publicNetworkAccess: publicNetworkAccess
     replicaCount: replicaCount
     semanticSearch: semanticSearch
     authOptions: {
-      aadOrApiKey: { aadAuthFailureMode: 'http401WithBearerChallenge' }
+      aadOrApiKey: {
+        aadAuthFailureMode: 'http401WithBearerChallenge'
+      }
     }
   }
+  sku: sku
 }
 
 resource existingPrivateEndpoint 'Microsoft.Network/privateEndpoints@2023-06-01' existing = if (useExistingSearchService && !empty(privateEndpointSubnetId)) {

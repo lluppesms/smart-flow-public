@@ -9,8 +9,6 @@ param logAnalyticsWorkspaceName string
 param logAnalyticsRgName string
 param appSubnetId string = ''
 param publicAccessEnabled bool = true
-// param privateEndpointName string = 'aca-pe'
-// param privateEndpointSubnetId string = ''
 param containerAppEnvironmentWorkloadProfiles array
 
 // --------------------------------------------------------------------------------------------------------------
@@ -51,18 +49,6 @@ resource newAppEnvironmentResource 'Microsoft.App/managedEnvironments@2024-03-01
     workloadProfiles: containerAppEnvironmentWorkloadProfiles
   }
 }
-
-// adding private endpoints disables public access
-// module privateEndpoint '../networking/private-endpoint.bicep' = if (empty(existingEnvironmentName) && !empty(privateEndpointSubnetId)) {
-//   name: '${cleanAppEnvName}-private-endpoint'
-//   params: {
-//     location: location
-//     privateEndpointName: privateEndpointName
-//     groupIds: ['managedEnvironments']
-//     targetResourceId: !empty(existingAppEnvironmentResource) ? existingAppEnvironmentResource.id : newAppEnvironmentResource.id
-//     subnetId: privateEndpointSubnetId
-//   }
-// }
 
 output id string = useExistingEnvironment ? existingAppEnvironmentResource.id : newAppEnvironmentResource.id
 output name string = useExistingEnvironment ? existingAppEnvironmentResource.name : newAppEnvironmentResource.name

@@ -1,37 +1,13 @@
-// --------------------------------------------------------------------------------------------------------------
-// Network Security Group
-// --------------------------------------------------------------------------------------------------------------
 param nsgName string
 param location string
 param tags object = {}
-param myIpAddress string = ''
 
-// --------------------------------------------------------------------------------------------------------------
-var addPersonalRule = !empty(myIpAddress)
-
-var personalRules = addPersonalRule ? [
-  {
-        name: 'AllowMyIP'
-        properties: {
-          priority: 140
-          direction: 'Inbound'
-          access: 'Allow'
-          protocol: '*'
-          sourceAddressPrefix: myIpAddress
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '443'
-        }
-    }
-] : []
-
-// --------------------------------------------------------------------------------------------------------------
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
   name: nsgName
   location: location
   tags: tags
   properties: {
-    securityRules: union(personalRules, [
+    securityRules: [
       {
         name: 'AllowAnyCustom8080Inbound'
         type: 'Microsoft.Network/networkSecurityGroups/securityRules'
@@ -102,11 +78,9 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-0
           direction: 'Outbound'
         }
       }
-    ])
+    ]
   }
 }
 
 output id string = networkSecurityGroup.id
 output name string = networkSecurityGroup.name
-output myIpAddress string = myIpAddress
-output addPersonalRule bool = addPersonalRule

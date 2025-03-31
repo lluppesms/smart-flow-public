@@ -9,8 +9,6 @@ param environmentName string = 'dev'
 @description('Optional resource token to ensure uniqueness - leave blank if desired')
 param resourceToken string = ''
 
-param location string = resourceGroup().location
-
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 var sanitizedEnvironment = toLower(environmentName)
 var sanitizedAppNameWithDashes = replace(replace(toLower(applicationName), ' ', ''), '_', '')
@@ -28,7 +26,6 @@ output webSiteAppServicePlanName string   = toLower('${sanitizedAppName}-${resou
 
 output appInsightsName string             = toLower('${sanitizedAppName}-${resourceAbbreviations.insightsComponents}-${sanitizedEnvironment}${resourceTokenWithDash}')
 output logAnalyticsWorkspaceName string   = toLower('${sanitizedAppName}-${resourceAbbreviations.operationalInsightsWorkspaces}-${sanitizedEnvironment}${resourceTokenWithDash}')
-output azureMonitorPLSName string         = toLower('${sanitizedAppName}-${resourceAbbreviations.networkPrivateLinkServices}monitor-${sanitizedEnvironment}${resourceTokenWithDash}')
 
 output cosmosName string                  = toLower('${sanitizedAppName}-${resourceAbbreviations.documentDBDatabaseAccounts}-${sanitizedEnvironment}${resourceTokenWithDash}')
 
@@ -49,17 +46,12 @@ output caManagedIdentityName string       = toLower('${sanitizedAppName}-${resou
 output kvManagedIdentityName string       = toLower('${sanitizedAppName}-${resourceAbbreviations.keyVaultVaults}-${resourceAbbreviations.managedIdentityUserAssignedIdentities}-${sanitizedEnvironment}${resourceToken}')
 output userAssignedIdentityName string    = toLower('${sanitizedAppName}-app-${resourceAbbreviations.managedIdentityUserAssignedIdentities}')
 
-var vnetName                              = toLower('${sanitizedAppName}-${resourceAbbreviations.networkVirtualNetworks}-${sanitizedEnvironment}${resourceTokenWithDash}')
-output vnet_Name string                   = vnetName
+output vnet_Name string                   = toLower('${sanitizedAppName}-${resourceAbbreviations.networkVirtualNetworks}-${sanitizedEnvironment}${resourceTokenWithDash}')
 output vnetAppSubnetName string           = toLower('snet-app')
 output vnetPeSubnetName string            = toLower('snet-prv-endpoint')
-output vnetAgentSubnetName string         = toLower('snet-agents')
-output nsgName string                     = toLower('${vnetName}-${resourceAbbreviations.networkNetworkSecurityGroups}-${location}')
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Container Registry, Key Vaults and Storage Account names are only alpha numeric characters limited length
-var acrName                               = take('${sanitizedAppName}${resourceAbbreviations.containerRegistryRegistries}${sanitizedEnvironment}${resourceTokenWithoutDash}', 50)
-output ACR_Name string                    = acrName
-output ACR_FQDN string                    = '${acrName}.azurecr.io'
+output ACR_Name string                    = take('${sanitizedAppName}${resourceAbbreviations.containerRegistryRegistries}${sanitizedEnvironment}${resourceTokenWithoutDash}', 50)
 output keyVaultName string                = take('${sanitizedAppName}${resourceAbbreviations.keyVaultVaults}${sanitizedEnvironment}${resourceTokenWithoutDash}', 24)
 output storageAccountName string          = take('${sanitizedAppName}${resourceAbbreviations.storageStorageAccounts}${sanitizedEnvironment}${resourceTokenWithoutDash}', 24)

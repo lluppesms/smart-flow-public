@@ -22,9 +22,6 @@ param secrets object = {}
 param env array = []
 
 // --------------------------------------------------------------------------------------------------------------
-// var registry = contains('.azurecr.io', toLower(registryName)) ? { identity: userIdentity.id, server: registryName } : { server: registryName } 
-
-// --------------------------------------------------------------------------------------------------------------
 resource containerAppEnvironmentResource 'Microsoft.App/managedEnvironments@2024-03-01' existing = {
   name: managedEnvironmentName
   scope: resourceGroup(managedEnvironmentRg)
@@ -59,10 +56,10 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
         targetPort: targetPort
         transport: 'auto'
       }
-      registries: [ 
+      registries: [
         {
           identity: userIdentity.id
-          server: registryName
+          server: '${registryName}.azurecr.io'
         }
       ]
       secrets: [for secret in items(secrets): {
